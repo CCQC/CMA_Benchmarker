@@ -26,7 +26,9 @@ np.set_printoptions(precision=4)
 # High and low levels of theory
 # Available: "CCSD_T_TZ", "CCSD_T_DZ", "B3LYP_6-31G_2df,p_"
 h_theory = ["CCSD_T_TZ"]
-l_theory = ["CCSD_T_DZ", "B3LYP_6-31G_2df,p_"]
+#l_theory = ["CCSD_T_DZ", "B3LYP_6-31G_2df,p_"]
+l_theory = ["B3LYP_6-31G_2df,p_"]
+#l_theory = ["CCSD_T_DZ"]
 combos = list(product(h_theory,l_theory))
 
 cma1_energy_regexes = ["\(T\)\s*t?o?t?a?l? energy\s+(\-\d+\.\d+)","Grab this energy (\-\d+\.\d+)"]
@@ -35,7 +37,8 @@ cma1_success_regexes = ["Variable memory released","beer"]
 
 # Coordinates types to use
 # Available: "Nattys", "Redundant", "ZMAT" (not yet tho)
-coord_type = ["Nattys", "Redundant"]
+#coord_type = ["Nattys", "Redundant"]
+coord_type = ["Nattys"]
 
 # Specify paths to grab data from
 # Options: '/1_Closed_Shell', '/1_Linear', '/1*', '/2_Open_Shell', '/2_Linear', '/2*'
@@ -45,15 +48,19 @@ coord_type = ["Nattys", "Redundant"]
 
 paths = ['/1*','/2*']
 # job_list = ["1.79"]
+#job_list = ["1.34"]
 
 # Various output control statements
-n = 0                    # Number of CMA2 corrections (n = 0 -> CMA0)
+n = 5                    # Number of CMA2 corrections (n = 0 -> CMA0)
+cma23_scaling = 2.0
 cma1 = False             # Run CMA1 instead of CMA0
-# cma1 = True             # Run CMA1 instead of CMA0
+#cma1 = True             # Run CMA1 instead of CMA0
 csv = True               # Generate database .csv file
 SI = False                # Generate LaTeX SI file
 # SI = True               # Generate LaTeX SI file
 # compute_all = False       # run calculations for all or a select few
+#SI = True               # Generate LaTeX SI file
+#compute_all = False       # run calculations for all or a select few
 compute_all = True       # run calculations for all or a select few
 off_diag_bands = False   # (CMA2/3 ONLY) If set to true, "n" off-diag bands selected, if false, "n" largest fc will be selected
 deriv_level = 0         # (CMA1) if 0, compute initial hessian by singlepoints. If 1, compute initial hessian with findif of gradients
@@ -321,6 +328,7 @@ def execute():
                             
                 
                     execMerger.options.n_cma2 = n
+                    execMerger.options.cma23_scaling = cma23_scaling
                     execMerger.options.off_diag = off_diag_bands
                 
                     # Run CMA
@@ -442,6 +450,7 @@ def execute():
                         execMerger.options.program_init = "psi4@master"
                     execMerger.options.coords = coord
                     execMerger.options.n_cma2 = n
+                    execMerger.options.cma23_scaling = cma23_scaling
                     execMerger.options.off_diag = off_diag_bands
                     execMerger.options.deriv_level = deriv_level
                     sym_sort = np.array([])

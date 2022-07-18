@@ -26,7 +26,7 @@ from concordantmodes.ted import TED
 from concordantmodes.trans_disp import TransDisp
 from concordantmodes.vulcan_template import VulcanTemplate
 from concordantmodes.zmat import Zmat
-
+from analysis import Analysis
 import copy
 from fractions import Fraction
 #import manual_projection
@@ -411,7 +411,19 @@ class Merger(object):
         )
         init_GF.run()
         self.ref_init = init_GF.freq
-        
+        #values for the TED analysis
+        #ll_modes and ll freqs
+        ll_modes = init_GF.L_p
+        unprimed_ll_modes = init_GF.L
+        print("ll_modes")
+        print(ll_modes)
+        ll_freqs = init_GF.freq 
+        print(init_GF.L)
+ 
+        test = np.multiply(unprimed_ll_modes, unprimed_ll_modes.T) * 100
+        print("psuedo-TED")
+        print(test)
+
         # Now for the TED check.
         G = np.dot(np.dot(LA.inv(init_GF.L), g_mat.G), LA.inv(init_GF.L).T)
         G[np.abs(G) < options.tol] = 0
@@ -432,9 +444,10 @@ class Merger(object):
        
         eigs = len(TED_GF.S)
         print('eigs')
+        print('eigs of lower level ?')
         print(eigs)
         self.eigs = eigs
-
+        print('init_GF.L', init_GF.L)
 
  
         proj_tol = 1.0e-3
@@ -561,9 +574,12 @@ class Merger(object):
                     # print('another')
                     # print(temp)
             # return temps
-        # print('is this the ted im looking for?')
-        # ted_breakdown = init_GF.ted_breakdown
-        # print(ted_breakdown)  
+        print('is this the ted im looking for?')
+        ted_breakdown = init_GF.ted_breakdown
+        print(ted_breakdown)  
+        ted_analysis = Analysis()
+        Extras, ind_a_priori = ted_analysis.run(ted_breakdown, ll_freqs, ll_modes,options.cma23_scaling)
+        #Extras, ind_a_priori = ted_analysis.run(ted_breakdown ,options.cma23_scaling)
         
         # temps = checkted(ted_breakdown) 
         
@@ -633,6 +649,8 @@ class Merger(object):
             pass
         
         self.Freq_cma2 = init_GF.freq
+        print('Show me the money, no off diags')
+        print(self.reference_freq - init_GF.freq)
         #print('merger needs to delete stuff as well')
         #print(dir())
         #everything below this line pertains to CMA2 off-diag elements being included in the GF matrix computation, its not an optimal setup, obviously
@@ -664,7 +682,8 @@ class Merger(object):
                 algo.run()
                 print('algo indices')
                 print(algo.indices)
-                temp = np.zeros((eigs,eigs))  
+                #temp = np.zeros((eigs,eigs))  
+                temp = copy.copy(Fdiag)
                 print('temp')
                 print(temp) 
                 for z, extra in enumerate(algo.indices):
@@ -675,16 +694,9 @@ class Merger(object):
                 print(temp)
             else:
                 extras = n_largest(self.options.n_cma2, np.abs(copy.copy(F)))
-                #91_ccsd extras = [[4,5],[10,11],[14,16]] 
-                #72_ccsd extras = [[4,5]]
-                #90_ccsd extras = [[15,17]]
-                #2.16_ccsd extras = [[7,9],[8,9]]
-                #10_ccsd extras = [[12,15]]
-                #82_ccsd extras = [[14,15]]
-                #70_ccsd extras = [[10,11],[0,1]]
-                #85_ccsd extras = [[1,4],[3,5]]
-                #extras = [[17,19]]
-                #extras = [[0,2]]
+                extras = ind_a_priori 
+                #extras = [[10,11],[14,16]]
+                
                 print('extras')
                 print(extras)
                 temp = copy.copy(Fdiag)
@@ -693,7 +705,9 @@ class Merger(object):
                     temp[extra[0], extra[1]] = element
                     temp[extra[1], extra[0]] = element
                 print('CMA2 FC matrix')
-                print(temp) 
+                print(temp)
+                print('This is the G-matrix')
+                print(G) 
             #if options.coords == 'Redundant':
             #    #F[index] = self.F_redundant[index]     
             #if options.coords == 'Custom':
@@ -715,5 +729,8 @@ class Merger(object):
                 False
             )
             init_GF.run()
-            print('CMA2 including ' + str(z + 1) + ' off-diagonal bands/elements for ' + str(options.coords) + ' coordinates')
+            #print('CMA2 including ' + str(z + 1) + ' off-diagonal bands/elements for ' + str(options.coords) + ' coordinates')
             print(init_GF.freq) 
+            self.Freq_cma2 = init_GF.freq
+            print('Show me the money')
+            print(self.reference_freq - init_GF.freq)
