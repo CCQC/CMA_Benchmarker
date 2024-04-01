@@ -26,39 +26,111 @@ np.set_printoptions(precision=4)
 # High and low levels of theory
 # Available: "CCSD_T_TZ", "CCSD_T_DZ", "B3LYP_6-31G_2df,p_"
 h_theory = ["CCSD_T_aTZ"]
-l_theory = ["CCSD_T_aDZ"]
+# h_theory = ["CCSD_T_TZ"]
+# l_theory = ["MP2_haTZ"]
+# l_theory = ["MP2_haDZ"]
+# l_theory = ["MP2_aTZ"]
+# l_theory = ["MP2_TZ"]
+# l_theory = ["MP2_aDZ"]
+# l_theory = ["MP2_DZ"]
+# l_theory = ["CCSD_T_haTZ"]
+# l_theory = ["CCSD_T_haDZ"]
+# l_theory = ["CCSD_T_aDZ"]
+# l_theory = ["CCSD_haTZ"]
+l_theory = ["CCSD_T_TZ"]
+# l_theory = ["CCSD_T_DZ"]
+# l_theory = [
+# # "CCSD_aTZ",
+# # "CCSD_haTZ",
+# "CCSD_T_aDZ",
+# "CCSD_T_DZ",
+# "CCSD_T_haDZ",
+# "CCSD_T_haTZ",
+# "CCSD_T_TZ",
+# "MP2_aDZ",
+# "MP2_aTZ",
+# "MP2_DZ",
+# "MP2_haDZ",
+# "MP2_haTZ",
+# "MP2_TZ"]
+
+# l_theory = ["CCSD_T_DZ", "B3LYP_6-31G_2df,p_"]
 combos = list(product(h_theory,l_theory))
-cma1_gradient_regex = ["\s*virial=\S\S+\.\d+E\S\d+\S\>\s+"]
-cma1_energy_regexes = ["\(T\)\s*t?o?t?a?l? energy\s+(\-\d+\.\d+)","Grab this energy (\-\d+\.\d+)"]
-#cma1_energy_regexes = ["\!MP2\stotal\senergy\s+(\-\d+\.\d+)","Grab this energy (\-\d+\.\d+)"]
+
+# cma1_energy_regexes = ["MP2\s*t?o?t?a?l? energy\s+(\-\d+\.\d+)"]
+cma1_energy_regexes = ["\(T\)\s*t?o?t?a?l? energy\s+(\-\d+\.\d+)"]
+# cma1_energy_regexes = [
+# # "CCSD_aTZ",
+# # "CCSD_haTZ",
+# "CCSD_T_aDZ",
+# "CCSD_T_DZ",
+# "CCSD_T_haDZ",
+# "CCSD_T_haTZ",
+# "CCSD_T_TZ",
+# "MP2_aDZ",
+# "MP2_aTZ",
+# "MP2_DZ",
+# "MP2_haDZ",
+# "MP2_haTZ",
+# "MP2_TZ"]
+
+# cma1_energy_regexes = ["CCSD\s*t?o?t?a?l? energy\s+(\-\d+\.\d+)"]
+# cma1_gradient_regex = ["\s*virial=\S\S+\.\d+E\S\d+\S\>\s+"]
+# cma1_energy_regexes = ["\(T\)\s*t?o?t?a?l? energy\s+(\-\d+\.\d+)","Grab this energy (\-\d+\.\d+)"]
 # cma1_energy_regexes = ["\(T\)\s*t?o?t?a?l? energy\s+(\-\d+\.\d+)",[r"Total Gradient",r"tstop"]]
-cma1_success_regexes = ["Variable memory released","beer"]
+# cma1_success_regexes = ["Variable memory released","beer"]
+cma1_success_regexes = ["Variable memory released"]
+# cma1_success_regexes = [
+# # "CCSD_aTZ",
+# # "CCSD_haTZ",
+# "CCSD_T_aDZ",
+# "CCSD_T_DZ",
+# "CCSD_T_haDZ",
+# "CCSD_T_haTZ",
+# "CCSD_T_TZ",
+# "MP2_aDZ",
+# "MP2_aTZ",
+# "MP2_DZ",
+# "MP2_haDZ",
+# "MP2_haTZ",
+# "MP2_TZ"]
 
 # Coordinates types to use
 # Available: "Nattys", "Redundant", "ZMAT" (not yet tho)
+# coord_type = ["Nattys", "Redundant"]
+# coord_type = ["Redundant"]
 coord_type = ["Nattys"]
 
 # Specify paths to grab data from
 # Options: '/1_Closed_Shell', '/1_Linear', '/1*', '/2_Open_Shell', '/2_Linear', '/2*'
-#paths = ['/2_Open_Shell']
-# paths = ['/1_Closed_Shell']
-#paths = ['/1_Closed_Shell','/2_Open_Shell']
+# paths = ['/2_Open_Shell']
+# paths = ['/4_G3_99']
+# paths = ['/3_Dimers']
+# paths = ['/1_Closed_Shell','/2_Open_Shell']
 
-# paths = ['/3_Dimers/2_formic_acid']
-# job_list = ["1.82"]
-job_list = ["3.1"]
+# paths = ['/1*','/2*']
+# job_list = ["4.31"]
+# job_list = ["1.104"]
+job_list = ["3.4"]
 
 # Various output control statements
 n = 0                    # Number of CMA2 corrections (n = 0 -> CMA0)
-#cma1 = False             # Run CMA1 instead of CMA0
+# n = 36                    # Number of CMA2 corrections (n = 0 -> CMA0)
+# n = 15                    # Number of CMA2 corrections (n = 0 -> CMA0)
+# n = 10                    # Number of CMA2 corrections (n = 0 -> CMA0)
+# cma1 = False             # Run CMA1 instead of CMA0
 cma1 = True             # Run CMA1 instead of CMA0
 csv = False               # Generate database .csv file
+# csv = True               # Generate database .csv file
 SI = False                # Generate LaTeX SI file
-#SI = True               # Generate LaTeX SI file
+# SI = True               # Generate LaTeX SI file
 compute_all = False       # run calculations for all or a select few
 # compute_all = True       # run calculations for all or a select few
 off_diag_bands = False   # (CMA2/3 ONLY) If set to true, "n" off-diag bands selected, if false, "n" largest fc will be selected
 deriv_level = 0         # (CMA1) if 0, compute initial hessian by singlepoints. If 1, compute initial hessian with findif of gradients
+second_order = True    # If True, read in cartesian gradient and force constant info to be converted to internal coordinates.
+# second_order = False    # If False, generate displacements to manually compute the CMA-0A internal coord force constants.
+
 
 # =====================
 # Some useful functions
@@ -128,7 +200,54 @@ print(
 """
 )
 
-print("Authors: Dr. Mitchell Lahm, Nathaniel Kitzmiller, Dr. Henry Mull")
+
+print("""
+.............................................................................,............
+........................................................;+..,,,:::::::::,,,,..;;..........
+......................................................:?S%*?*?%%%%SSSS%%%%?*++##?:........
+...................................................,:?SS%%S#S%%?*******??%SSS###@#*,......
+...................................................;??%%S#@%,.............,:#@@@@#@S;.....
+......................................................,,,:::...............,;;;::,,,,.....
+..........................................................................................
+.................................................................,,,,,,,,,,,,.............
+................................................................:::,,....,,:::............
+...............................................................:;::,.,,,,,,:;+;...........
+..............................................................,++;;:::::::;;++*,..........
+..............................................................:*+*++++;;;++****,..........
+..............................................................,+??????**?????%+...........
+...............................................................,+%SSSSSSSSSS%+,...........
+.................................................................:+%#@#@S%?+,.............
+...................................................................:###S:,................
+...................................................................+SS#?..................
+...................................................................?SS#+..................
+..................................................................,SSS#:..................
+................................................................,.:SSSS,..................
+................,*+...............................................+#S#?...................
+.............,:*%#%...........................................,,,,?SS#+...................
+...........,;?%?%#S,......................................,:;+*??%%%%S?*+:,...............
+...........,;*?*?##:.................................,,.,;*%%%%%%%%%%%%%%%?+:.............
+............,%S#?;*:...................................:?%%%%%%%%%%%%%%%%%%%%+,,..........
+............+SS#;............,,.......................+%%%%%%%%%%%%%%%%%%%%%%S?,..........
+............%S#%..,......,,,,,,,,,,,.................;S%%%%%%?*?%%%%%%?*?%%%%%S*,.........
+...........,SS#*.....,.,::,,.....,::;,..............,?S%%%%%%%%%%%%%%%%%%%%%SSSS:.........
+...........:SS#+......,;;;:,,,,,,,::++;;;;;+++++*****SSSSS%%%%%%%%%%%%%%%%%SSSSS;.........
+...........:#S#+......:++;::::::::;;**%SSSSSSSSSSSSSS#SSSSSSS%%%%%%%%%SSSSSSSSS#;.........
+...........,SS#?......;**+++;;;;+++*???????***+++;;;:*#SSSSSSSSSSSSSSSSSSSSSSSS%,.........
+............?#SS,...,.,*%??*****??????:..............,?#SSSSSSSSSSSSSSSSSSSSS#S:..........
+............:#SS%%*,...,*%%SSSSSSSS%?:................,*##SSSS###############%:...........
+...........;S@@#@@?......:+?%SSSS%*;,...................;?S################%+,.,..........
+...........,;%@@@@;.........,,,,,.........................:*%S####@@@##S%*;,..............
+.............,;%@#,..........................................,:;+++++;:,..................
+................;+,.......................................................................
+..........................................................................................
+..........................................................................................
+..........................................................................................
+..........................................................................................
+..........................................................................................
+..........................................................................................
+""")
+
+print("Contributors: Dr. Mitchell Lahm, Nathaniel Kitzmiller, Dr. Henry Mull, Laura Olive, Jace Jin")
 print()
 print("Combinations of levels of theory (high, low): ", end="")
 print(*combos, sep=", ")
@@ -188,7 +307,7 @@ def execute():
         options = None
 
         # Initialize objects
-        mol = Molecule(job)
+        mol = Molecule(job,h_theory)
         basename = return_path_base(job) 
         d = {'Molecule' : None}     # Ensures molecule is first column
         z = {'Molecule' : None}     # Ensures molecule is first column
@@ -233,11 +352,6 @@ def execute():
                     print("="*50)
                     print()
                 
-                    # Skip redundants if linear molecule
-                    # if 'Linear' in job and coord == 'Redundant':
-                        # print("What kind of idiot would use redundants for a linear molecule")
-                        # continue
-
                     from Merger import Merger
                     execMerger = Merger()
                      
@@ -262,8 +376,6 @@ def execute():
                             sym_sort = copy.copy(project_obj.sym_sort)
                         except:
                             pass
-                        # finally:
-                            # continue
                         mol.proj = Proj
                         mol.get_nattys(combo)
                     
@@ -366,20 +478,14 @@ def execute():
             # Mitchell's playground
             #======================
             elif not mol.direc_complete:
-                #cma1 = False 
                 continue
             
             elif cma1:
                 # move into directory with higher level geom, fc.dat, and Disp directories
                 os.chdir(f"{job}/")
-                # Add your code here
                 print(f"I am in {os.getcwd()} and I can see {os.listdir()}")
                 print(job + combo[0]) 
                 
-                # raise RuntimeError
-
-                # In the future we can use this coord loop if we want to 
-                # But for now we will stick with redundants
                 for coord in coord_type:
                     print()
                     print("="*50)
@@ -397,23 +503,36 @@ def execute():
                         #change to True if you need the displacements generated
                         execMerger.options.calc_init = True
 
-                   
-                    #if combo[1] == "CCSD_T_DZ":
-                       # execMerger.options.cart_insert_init = 9
-                    #elif combo[1] == "B3LYP_6-31G_2df,p_":
-                        # execMerger.options.cart_insert_init = 4
-                        # execMerger.options.cart_insert_init = 315
-                    if combo[1] != "B3LYP_6-31G_2df,p_": 
-                        execMerger.options.cart_insert_init = 7 
-                    else:
+                    # execMerger.options.calc_init = False
+                    # execMerger.options.gen_disps_init = False
+                    execMerger.options.cart_insert_init = 9
+                    execMerger.options.other_F_matrix = ''
+                    # execMerger.options.other_F_matrix = 'MP2_haTZ'
+                    if len(execMerger.options.other_F_matrix):
+                        if os.path.exists(os.getcwd()+"/"+combo[0]+"/Disps_"+execMerger.options.other_F_matrix+"/fc_int_nat.dat"):
+                            shutil.copyfile(os.getcwd()+"/"+combo[0]+"/Disps_"+execMerger.options.other_F_matrix+"/fc_int_nat.dat",os.getcwd()+"/inter_fc.dat")
+                    if combo[1] == "CCSD_T_DZ":
+                        execMerger.options.cart_insert_init = 9
+                    elif combo[1] == "B3LYP_6-31G_2df,p_":
                         execMerger.options.cart_insert_init = 4
                         execMerger.options.program_init = "psi4@master"
                     execMerger.options.coords = coord
                     execMerger.options.n_cma2 = n
                     execMerger.options.off_diag = off_diag_bands
                     execMerger.options.deriv_level = deriv_level
+                    execMerger.options.second_order = second_order
                     sym_sort = np.array([])
                     if coord == "Nattys":
+                        # print("Where are the zmats coming from?")
+                        # print(combo[0])
+                        if second_order:
+                            try:
+                                shutil.copyfile(job + combo[0] + "/Disps_" + combo[1] + "/fc.dat", job + "fc.dat")
+                                shutil.copyfile(job + combo[0] + "/Disps_" + combo[1] + "/fc.grad", job + "fc.grad")
+                            except:
+                                print('Once again, the directory does not contain the sufficient files for the specified job')
+                                mol.direc_complete = False
+                                break 
                         try: 
                             shutil.copyfile(job + combo[0] + "/zmat", job + "zmat")
                             shutil.copyfile(job + combo[0] + "/zmat", job + "zmat2")
@@ -422,7 +541,6 @@ def execute():
                             print('Once again, the directory does not contain the sufficient files for the specified job')
                             mol.direc_complete = False
                             break 
-                        # print("No Nattys :(")
                         cma1_coord = "nat"
                         execMerger.options.man_proj = True
                         execMerger.options.coords = 'Custom'
@@ -434,21 +552,24 @@ def execute():
                         Proj = copy.copy(project_obj.Proj)
                         mol.proj = Proj
                         np.set_printoptions(precision=4,threshold=sys.maxsize,linewidth=500)
-                        # print("Unsorted Proj:")
-                        # print(Proj)
                         try:
                             sym_sort = copy.copy(project_obj.sym_sort)
                         except:
                             pass
-                        # finally:
-                            # pass
                         mol.get_nattys(combo)
                 
                     else:
-                        print(job + combo[0]) 
+                        if second_order:
+                            try:
+                                shutil.copyfile(job + combo[0] + "/Disps_" + combo[1] + "/fc.dat", job + "fc.dat")
+                                shutil.copyfile(job + combo[0] + "/Disps_" + combo[1] + "/fc.grad", job + "fc.grad")
+                            except:
+                                print('Once again, the directory does not contain the sufficient files for the specified job')
+                                mol.direc_complete = False
+                                break 
                         try: 
-                            shutil.copyfile(job + combo[0] + "/zmat", job + "zmat")
-                            shutil.copyfile(job + combo[0] + "/zmat", job + "zmat2")
+                            shutil.copyfile(job + combo[0] + "/zmat_red", job + "zmat")
+                            shutil.copyfile(job + combo[0] + "/zmat_red", job + "zmat2")
                             shutil.copyfile(job + combo[0] + "/fc.dat", job + "fc2.dat")       
                             #shutil.copyfile(job + combo[0] + "/zmat_cma1", job + "zmat")
                             #shutil.copyfile(job + combo[0] + "/zmat_cma1_Final", job + "zmat2")
@@ -457,37 +578,26 @@ def execute():
                             mol.direc_complete = False
                             break 
                         cma1_coord = "red"
-                        # Import Merger
-                        # print(os.getcwd())
-                        # raise RuntimeError
-                            # shutil.copy(os.getcwd() + "/" + combo[0]+"/Disps_" + combo[1] + "/templateInit.dat",os.getcwd() + "/" + combo[0]+ "/templateInit.dat")
                         execMerger.options.man_proj = False
                         execMerger.options.coords = coord
                         execMerger.options.gradient_regex = cma1_gradient_regex
                         Proj = None
                         if 'Linear' in job:
                             execMerger.options.coords = 'Custom'
-                        # print(cma1_energy_regexes)
                     execMerger.run(execMerger.options,Proj,energy_regex=cma1_energy_regexes[countt],success_regex=cma1_success_regexes[countt],cma1_coord=cma1_coord, sym_sort=sym_sort)
-                    # execMerger.run(execMerger.options,Proj,energy_regex=cma1_energy_regexes[countt],success_regex=cma1_success_regexes[countt],cma1_coord=cma1_coord)
-                    # Run the thing
-                    #execMerger.run(execMerger.options, Proj)
 
                     # Collect the data in dictionary d to add it to the database
                     # e.g. d[f"Ref {combo[0]}"] = execMerger.reference_freq
                     # d[f"CMA1 {combo[1]}"] = execMerger.Freq_redundant
                     # Collect data
                     if coord_type.index(coord) == 1:
-                        # print("Is this thing on?")
                         d[f'Ref ({combo[0]})'] = execMerger.reference_freq
                         z[f'Ref ({combo[0]})'] = np.sum(execMerger.reference_freq)/(2*349.7550881133)
-                        # print(execMerger.reference_freq)
                         mol.freqs[f'Ref ({combo[0]})'] = execMerger.reference_freq
                         
                         # Number the modes
                         d['Molecule'] = [f"{mol.name} ({mol.ID}) mode {i+1}" for i in range(len(execMerger.reference_freq))]
                         z['Molecule'] = [f"{mol.name} ({mol.ID})"]
-                        # print(d['Molecule'])
                     
                     if coord == "Nattys":
                         d[f'Natty ({combo[1]})'] = execMerger.Freq_custom
@@ -545,7 +655,6 @@ def execute():
         # end of combo loop
         if mol.direc_complete: 
             # Print molecule information
-            mol.run()
             if SI:
                 si.write(mol.build_latex_output(cma1=cma1))
             
@@ -555,24 +664,21 @@ def execute():
             try: 
                 os.remove("zmat")
                 os.remove("zmat2")
+                if second_order:
+                    os.remove("fc.dat")
                 os.remove("fc2.dat")
-                # os.remove("templateInit.dat")
+                os.remove("inter_fc.dat")
             except:
                 print('These are not the files you are looking for') 
             
+            mol.run()
             sys.path.remove(job)
             del mol
-
-            # Skip dataframe if linear molecule
-            # if 'Linear' in job:
-                # continue
 
             # Add to pandas dataframe
             if csv:
                 df = pd.DataFrame(data=d)
                 zf = pd.DataFrame(data=z)
-                # print(df)
-                # print()
                 frame.append(df)
                 framez.append(zf)
             

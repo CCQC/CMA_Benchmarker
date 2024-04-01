@@ -18,9 +18,9 @@ class Projection(object):
         HC_str = np.eye(1)
  
         HA_str = normalize(np.array([
-        [ 1, 1, 1],
-        [ 2,-1,-1],
-        [ 0, 1,-1],
+        [1, 1, 1],
+        [2,-1,-1],
+        [0, 1,-1],
         ]).T)
        
         CH_str = normalize(np.array([

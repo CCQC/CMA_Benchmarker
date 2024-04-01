@@ -16,7 +16,7 @@ class Projection(object):
     def run(self):
 
         HA_str = normalize(np.array([
-	[1, 1],
+	    [1, 1],
         [1,-1],
         ]).T)
        
@@ -30,7 +30,7 @@ class Projection(object):
         ]).T)
        
         CH_str2 = normalize(np.array([
-	[1, 1],
+	    [1, 1],
         [1,-1],
         ]).T)
        

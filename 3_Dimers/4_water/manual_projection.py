@@ -32,7 +32,7 @@ class Projection(object):
         [1],
         ]).T
 
-        Proj = block_diag(HA_str,HA_str,HOH_bend,HOH_bend,HOH_bend,HA_str,HOH_bend,P_combo,HOH_bend)
+        Proj = block_diag(HA_str,HA_str,HOH_bend,HOH_bend,HOH_bend,HOH_bend,HOH_bend,HOH_bend,HOH_bend,HOH_bend)
         Proj = 1/norm(Proj,axis=0)*Proj
         
         self.Proj = Proj

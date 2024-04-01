@@ -10,17 +10,21 @@ pd.set_option("display.max_columns", 15)
 
 class Molecule(object):
 
-    def __init__(self,job):
+    def __init__(self,job,h_theory):
         info = re.search(r"/(\d*)_.*/(\d*)_(.*)/", job)
         self.ID = f"{info.group(1)}.{info.group(2)}"
         self.name = info.group(3)
-        if info.group(1) == "1":
-            self.section = "\\section{Closed Shell}\n\n"
-        elif info.group(1) == "2":
-            self.section = "\\section{Open Shell}\n\n"
+        # if info.group(1) == "1":
+            # self.section = "\\section{Closed Shell}\n\n"
+        # elif info.group(1) == "2":
+            # self.section = "\\section{Open Shell}\n\n"
+        # elif info.group(1) == "3":
+        if info.group(1) == "3":
+            self.section = "\\section{Dimers}\n\n"
         self.geoms = {}
         self.freqs = {}
         self.ted = {}
+        self.h_theory = h_theory
         self.proj = None
     
     def run(self):
@@ -149,15 +153,35 @@ class Molecule(object):
                 read = False
                 break
             if re.search(r"\d+", line):
-                zmat.append(line.split())
-
+                if re.search(r";", line):
+                    line = line.split(";")[1:]
+                    if len(line) == 4:
+                        last = line[3].split()
+                        if len(last[0]):
+                            new = last[0]
+                        for i in range(len(last)-2):
+                            if len(last[i+1]):
+                                new += " " + last[i+1]
+                        for i in range(len(last)):
+                            if last[i] == "T" or last[i] == "O" or last[i] == "L" or last[i] == "Lx" or last[i] == "Ly":
+                                label = last[i]
+                        line[-1] = new
+                        line.append(label)
+                        zmat.append(line)
+                    else:
+                        line[-1] = line[-1][:-1]
+                        zmat.append(line)
+                else:
+                    zmat.append(line.split())
+        
+        # print("zmat:")
+        # print(zmat)
         # Format zmat to be more readable
         for i, coord in enumerate(zmat):
             zmat[i] = ZCoord(coord)
         
         # Combine proj and zmat 
         nics = []
-        # print(self.proj.T)
         for coord in self.proj.T:
             tmp = coord/np.abs(coord)[coord!=0].min()
             tmp = np.rint(tmp)
@@ -179,18 +203,42 @@ class Molecule(object):
                 # "\\subsubsection*{Geometries}\n"
                 # "\\begin{multicols}{2}\n"
                 # "\\centering\n") 
-        for i, g in enumerate(self.geoms):
+        if cma1:
+            g = self.h_theory[0]
             txt += ("\\begin{table}[h!]\n"
                     "\\centering\n")
             if g == "CCSD_T_TZ":
                 cap = "CCSD(T)/cc-pVTZ"
             elif g == "CCSD_T_DZ":
                 cap = "CCSD(T)/cc-pVDZ"
+            elif g == "CCSD_T_haDZ":
+                cap = "CCSD(T)/haDZ"
+            elif g == "CCSD_T_haTZ":
+                cap = "CCSD(T)/haTZ"
+            elif g == "CCSD_T_aTZ":
+                cap = "CCSD(T)/aug-cc-pVTZ"
+            elif g == "CCSD_T_aDZ":
+                cap = "CCSD(T)/aug-cc-pVDZ"
+            elif g == "CCSD_haTZ":
+                cap = "CCSD/haTZ"
             elif g == "B3LYP_6-31G_2df,p_":
                 cap = "B3LYP/6-31G(2df,p)"
+            elif g == "CCSD_T_aTZ":
+                cap = "CCSD(T)/aug-cc-pVTZ"
+            elif g == "MP2_haTZ":
+                cap = "MP2/haTZ"
+            elif g == "MP2_aTZ":
+                cap = "MP2/aug-cc-pVTZ"
+            elif g == "MP2_aDZ":
+                cap = "MP2/aug-cc-pVDZ"
+            elif g == "MP2_haDZ":
+                cap = "MP2/haDZ"
+            elif g == "MP2_TZ":
+                cap = "MP2/cc-pVTZ"
+            elif g == "MP2_DZ":
+                cap = "MP2/cc-pVDZ"
             else:
-                cap = g
-    
+                    cap = g
             txt += (f"\\caption{{{cap} Cartesian Coordinates (Bohr)}}\n"
                     "\\begin{tabular}{llrrr}\n")
                     # "\\begin{tabular}{llrrr}\n"
@@ -215,19 +263,84 @@ class Molecule(object):
                 # if i < len(self.geoms)-2:
                     # txt += ("\\begin{multicols}{2}\n")
                 # txt += "\\centering\n"
-        
+            
             txt += "\\end{table}\n\n"
+        else:
+            for i, g in enumerate(self.geoms):
+                txt += ("\\begin{table}[h!]\n"
+                        "\\centering\n")
+                if g == "CCSD_T_TZ":
+                    cap = "CCSD(T)/cc-pVTZ"
+                elif g == "CCSD_T_DZ":
+                    cap = "CCSD(T)/cc-pVDZ"
+                elif g == "CCSD_T_haDZ":
+                    cap = "CCSD(T)/haDZ"
+                elif g == "CCSD_T_haTZ":
+                    cap = "CCSD(T)/haTZ"
+                elif g == "CCSD_T_aDZ":
+                    cap = "CCSD(T)/aug-cc-pVDZ"
+                elif g == "CCSD_haTZ":
+                    cap = "CCSD/haTZ"
+                elif g == "B3LYP_6-31G_2df,p_":
+                    cap = "B3LYP/6-31G(2df,p)"
+                elif g == "CCSD_T_aTZ":
+                    cap = "CCSD(T)/aug-cc-pVTZ"
+                elif g == "MP2_haTZ":
+                    cap = "MP2/haTZ"
+                elif g == "MP2_aTZ":
+                    cap = "MP2/aug-cc-pVTZ"
+                elif g == "MP2_aDZ":
+                    cap = "MP2/aug-cc-pVDZ"
+                elif g == "MP2_haDZ":
+                    cap = "MP2/haDZ"
+                elif g == "MP2_TZ":
+                    cap = "MP2/cc-pVTZ"
+                elif g == "MP2_DZ":
+                    cap = "MP2/cc-pVDZ"
+                else:
+                    cap = g
+    
+                txt += (f"\\caption{{{cap} Cartesian Coordinates (Bohr)}}\n"
+                        "\\begin{tabular}{llrrr}\n")
+                        # "\\begin{tabular}{llrrr}\n"
+                # txt += ("\\begin{tabular}{llrrr}\n"
+                        # f"\\caption{{{cap} Cartesian Coordinates (Bohr)}}\n"
+                         # "\\hline\n")
+                         # "\\vrule\n")
+                         # "\\toprule\n")
+                for j, line in enumerate(self.geoms[g]):
+                    txt += f"{j+1:<2} & {line[0]:<2} & ${float(line[1]):>11.8f}$ & ${float(line[2]):>11.8f}$ & ${float(line[3]):>11.8f}$ \\\\\n"
+                # txt += ("\\bottomrule\n"
+                txt += ("\\end{tabular}\n")
+                # txt += ("\\vrule\n"
+                # txt += ("\\hline\n"
+                        # "\\end{tabular}\n")
+                # if i%2 == 1:
+                    # txt += ("\\end{multicols}\n"
+                    # txt += ("\\end{table}\n")
+                    # txt += ("\\end{table}\n\n"
+                            # "\\end{table}\n\n"
+                            # "\\begin{table}[h]\n")
+                    # if i < len(self.geoms)-2:
+                        # txt += ("\\begin{multicols}{2}\n")
+                    # txt += "\\centering\n"
+            
+                txt += "\\end{table}\n\n"
 
         txt += "\\clearpage\n\n"
         # Frequencies
         # txt += ("\\begin{table}[h!]\n"
-        txt += ("\\subsubsection*{Frequencies}\n"
-                "\\begin{table}[h!]\n"
-                # "\\subsubsection*{Frequencies}\n"
-                "\\centering\n")
+        txt += ("\\subsubsection*{Frequencies}\n")
         
-        labels = [("Reference","CCSD(T)/","cc-pVTZ")]
+        # labels = [("Reference","CCSD(T)/","cc-pVTZ")]
+        # labels = [("Reference","CCSD(T)/","aug-cc-pVTZ")]
+        i = 0
+        j = 0
+        labels = []
+        keys = []
+        temp_freqs = {}
         for key in self.freqs:
+            keys.append(key)
             if key == "Ref (CCSD_T_DZ)":
                 labels.append(("Reference","CCSD(T)/","cc-pVDZ"))
             if key == "Ref (B3LYP_6-31G_2df,p_)":
@@ -235,39 +348,128 @@ class Molecule(object):
             if key == "Natty (CCSD_T_DZ)":
                 # labels.append(("CMA0","NCs","TZ/DZ"))
                 if cma1:
-                    labels.append(("CMA-0A","NCs","TZ/DZ"))
+                    labels.append(("CMA-0A","NCs","(T)/DZ"))
                 else:
-                    labels.append(("CMA-0B","NCs","TZ/DZ"))
+                    labels.append(("CMA-0B","NCs","(T)/DZ"))
+            if key == "Natty (CCSD_T_TZ)":
+                # labels.append(("CMA0","NCs","TZ/DZ"))
+                if cma1:
+                    labels.append(("CMA-0A","NCs","(T)/TZ"))
+                else:
+                    labels.append(("CMA-0B","NCs","(T)/TZ"))
+            if key == "Natty (CCSD_T_haDZ)":
+                # labels.append(("CMA0","NCs","TZ/DZ"))
+                if cma1:
+                    labels.append(("CMA-0A","NCs","(T)/haDZ"))
+                else:
+                    labels.append(("CMA-0B","NCs","(T)/haDZ"))
+            if key == "Natty (CCSD_T_aDZ)":
+                # labels.append(("CMA0","NCs","TZ/DZ"))
+                if cma1:
+                    labels.append(("CMA-0A","NCs","(T)/aDZ"))
+                else:
+                    labels.append(("CMA-0B","NCs","(T)/aDZ"))
+            if key == "Natty (CCSD_T_haTZ)":
+                # labels.append(("CMA0","NCs","TZ/DZ"))
+                if cma1:
+                    labels.append(("CMA-0A","NCs","(T)/haTZ"))
+                else:
+                    labels.append(("CMA-0B","NCs","(T)/haTZ"))
+            if key == "Natty (CCSD_haTZ)":
+                # labels.append(("CMA0","NCs","TZ/DZ"))
+                if cma1:
+                    labels.append(("CMA-0A","NCs","(T)/haTZ"))
+                else:
+                    labels.append(("CMA-0B","NCs","(T)/haTZ"))
+            if key == "Natty (MP2_haTZ)":
+                # labels.append(("CMA0","NCs","TZ/DZ"))
+                if cma1:
+                    labels.append(("CMA-0A","NCs","MP2/haTZ"))
+                else:
+                    labels.append(("CMA-0B","NCs","MP2/haTZ"))
+            if key == "Natty (MP2_aTZ)":
+                # labels.append(("CMA0","NCs","TZ/DZ"))
+                if cma1:
+                    labels.append(("CMA-0A","NCs","MP2/aTZ"))
+                else:
+                    labels.append(("CMA-0B","NCs","MP2/aTZ"))
+            if key == "Natty (MP2_TZ)":
+                # labels.append(("CMA0","NCs","TZ/DZ"))
+                if cma1:
+                    labels.append(("CMA-0A","NCs","MP2/TZ"))
+                else:
+                    labels.append(("CMA-0B","NCs","MP2/TZ"))
+            if key == "Natty (MP2_aDZ)":
+                # labels.append(("CMA0","NCs","TZ/DZ"))
+                if cma1:
+                    labels.append(("CMA-0A","NCs","MP2/aDZ"))
+                else:
+                    labels.append(("CMA-0B","NCs","MP2/aDZ"))
+            if key == "Natty (MP2_haDZ)":
+                # labels.append(("CMA0","NCs","TZ/DZ"))
+                if cma1:
+                    labels.append(("CMA-0A","NCs","MP2/haDZ"))
+                else:
+                    labels.append(("CMA-0B","NCs","MP2/haDZ"))
+            if key == "Natty (MP2_DZ)":
+                # labels.append(("CMA0","NCs","TZ/DZ"))
+                if cma1:
+                    labels.append(("CMA-0A","NCs","MP2/DZ"))
+                else:
+                    labels.append(("CMA-0B","NCs","MP2/DZ"))
             if key == "Red (CCSD_T_DZ)":
                 # labels.append(("CMA0","DCs","TZ/DZ"))
                 if cma1:
-                    labels.append(("CMA-0A","DCs","TZ/DZ"))
+                    labels.append(("CMA-0A","DCs","(T)/DZ"))
                 else:
-                    labels.append(("CMA-0B","DCs","TZ/DZ"))
+                    labels.append(("CMA-0B","DCs","(T)/DZ"))
             if key == "Natty (B3LYP_6-31G_2df,p_)":
                 # labels.append(("CMA0","NCs","TZ/DFT"))
                 if cma1:
-                    labels.append(("CMA-0A","NCs","TZ/DFT"))
+                    labels.append(("CMA-0A","NCs","B3LYP"))
                 else:
-                    labels.append(("CMA-0B","NCs","TZ/DFT"))
+                    labels.append(("CMA-0B","NCs","B3LYP"))
             if key == "Red (B3LYP_6-31G_2df,p_)":
                 # labels.append(("CMA0","DCs","TZ/DFT"))
                 if cma1:
-                    labels.append(("CMA-0A","DCs","TZ/DFT"))
+                    labels.append(("CMA-0A","DCs","B3LYP"))
                 else:
-                    labels.append(("CMA-0B","DCs","TZ/DFT"))
-        ind = pd.MultiIndex.from_tuples(labels)       
-        fdf = pd.DataFrame(data=self.freqs)
-        fdf.columns = ind
-        fdf.index += 1
+                    labels.append(("CMA-0B","DCs","B3LYP"))
+            
+            if i > 7 or j + 1 == len(self.freqs):
+                txt += (
+                    "\\begin{table}[h!]\n"
+                    # "\\subsubsection*{Frequencies}\n"
+                    "\\centering\n")
+                print(self.freqs)
+                print(labels)
+                print(keys)
+                # print(self.freqs[keys])
+                for k in range(len(keys)):
+                    print(keys[k])
+                    print(self.freqs[keys[k]])
+                    temp_freqs[keys[k]] = self.freqs[keys[k]]
+                print(temp_freqs)
+                ind = pd.MultiIndex.from_tuples(labels) 
+                fdf = pd.DataFrame(data=temp_freqs)
+                # fdf = pd.DataFrame(data=self.freqs)
+                fdf.columns = ind
+                fdf.index += 1
+                
+                txt += "\\caption{Harmonic frequencies for reference and CMA0 data targeting the CCSD(T)/aug-cc-pVTZ level of theory.}\n"
+                # if cma1:
+                    # txt += "\\caption{Harmonic frequencies for reference and CMA1 data.}\n"
+                # else:
+                    # txt += "\\caption{Harmonic frequencies for reference and CMA0 data.}\n"
+                txt += fdf.to_latex(float_format="%.2f",column_format="c"*(i+2),multicolumn_format="c")
+                txt += "\\end{table}\n\n"
+                labels = []
+                keys = []
+                temp_freqs = {}
+                i = 0 
+            i += 1
+            j += 1
         
-        txt += "\\caption{Harmonic frequencies for reference and CMA0 data.}\n"
-        # if cma1:
-            # txt += "\\caption{Harmonic frequencies for reference and CMA1 data.}\n"
-        # else:
-            # txt += "\\caption{Harmonic frequencies for reference and CMA0 data.}\n"
-        txt += fdf.to_latex(float_format="%.2f",column_format="c"*(len(self.freqs)+1),multicolumn_format="c")
-        txt += "\\end{table}\n\n"
 
         # Nattys
         tmp = ""
@@ -350,6 +552,8 @@ class ZCoord(object):
 
     def __init__(self,ind):
         # Identify coordinate type
+        # print("ZCoord Ind:")
+        # print(ind)
         if len(ind) == 2:
             self.ind = ",".join(ind)
             self.coord_out = f"r({self.ind})"

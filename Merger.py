@@ -6,6 +6,7 @@ import json
 import subprocess
 import time
 import numpy as np
+
 from numpy import linalg as LA
 from numpy.linalg import inv
 from scipy.linalg import fractional_matrix_power
@@ -17,6 +18,7 @@ from concordantmodes.f_read import FcRead
 from concordantmodes.force_constant import ForceConstant
 from concordantmodes.gf_method import GFMethod
 from concordantmodes.g_matrix import GMatrix
+from concordantmodes.g_read import GrRead
 from concordantmodes.int2cart import Int2Cart
 from concordantmodes.options import Options
 from concordantmodes.reap import Reap
@@ -29,8 +31,6 @@ from concordantmodes.zmat import Zmat
 
 import copy
 from fractions import Fraction
-#import manual_projection
-#manual_projection
 
 class Merger(object):
 
@@ -45,6 +45,8 @@ class Merger(object):
             "calc" : False,
             "calc_init" : False,
             "success_regex": r"Variable memory released",
+            # "reduced_disp" : True,
+            # "disp" : 1.0
         }
         options_obj = Options(**options_kwargs)
         self.options = options_obj 
@@ -55,46 +57,18 @@ class Merger(object):
 
         print("You have imported the merger script!")
         
-        #options_kwargs = {
-        #    "queue": "gen4.q,gen6.q,gen5.q",
-        #    "program": "molpro@2010.1.67+mpi",
-        #    "energy_regex": r"\(T\) energy\s+(\-\d+\.\d+)",
-        #    'energy_regex' : r"\s*\!CCSD\(T\) total energy\s+(-\d+\.\d+)",
-        #    "cart_insert": 9,
-        #    #"man_proj" : True,
-        #    "calc" : False,
-        #    #"coords": "Custom",
-        #    "success_regex": r"Variable memory released",
-        #}
-        #options_obj = Options(**options_kwargs)
         self.Proj = Proj 
         options = opts 
         #options = options_obj
-        # options.cart_insert_init = 9
+        # options.cart_insert_init = 26
+        options.cart_insert_init = 9
         rootdir = os.getcwd()
         zmat_obj = Zmat(options)
         zmat_obj.run()
-        # raise RuntimeError
 
-        # Build manual projection matrix here.
         np.set_printoptions(edgeitems=60,linewidth=1000)
-        #if options.man_proj: 
-        #    project_obj = manual_projection.Projection(options)
-        #    project_obj.run()
-        #    
-        #    
-        #    self.Proj = project_obj.Proj
-        #    print('why is this not reloading')
-        #    print(self.Proj)
-        #else:
-        #    self.Proj = None 
+        
         # Compute the initial s-vectors
-        #frac_rep = copy.copy(Proj)
-        ##np.set_printoptions(formatter={'all':lambda x: str(fractions.Fraction(x).limit_denominator())})
-        ##print(A_inv)
-        #yeet = np.vectorize(Fraction)(frac_rep)
-        #print('trying to print a dang fraction')
-        #print(yeet)
         s_vec = SVectors(
             zmat_obj, options, zmat_obj.variable_dictionary_init
         )
@@ -103,15 +77,24 @@ class Merger(object):
         else:
             print('this is proj, check for this when redundants executed')
             print(self.Proj)
-        s_vec.run(zmat_obj.cartesians_init, True, proj=self.Proj)
+        s_vec.run(zmat_obj.cartesians_init, True, proj=self.Proj, second_order=options.second_order)
                 
         TED_obj = TED(s_vec.proj, zmat_obj)
+        print("TED PROJ:")
+        print(TED_obj.proj)
         
         g_mat = GMatrix(zmat_obj, s_vec, options)
         g_mat.run()
         
         G = g_mat.G.copy()
-        Gdz = G.copy()
+        
+        if os.path.exists(rootdir + "/fc.grad"):
+            print('FC GRAD EXISTS')
+            # raise RuntimeError
+            g_read_obj = GrRead("fc.grad")
+            g_read_obj.run(zmat_obj.cartesians_init)
+
+
         init_bool = False
         if os.path.exists(rootdir + "/fc.dat"):
             f_read_obj = FcRead("fc.dat")
@@ -129,20 +112,6 @@ class Merger(object):
                     shutil.rmtree("DispsInit")
                 f_read_obj = FcRead("fc_int_"+cma1_coord+".dat")
                 f_read_obj.run()
-                # indices = np.triu_indices(len(s_vec.proj.T))
-                # indices = np.array(indices).T
-                # eigs_init = np.eye(len(s_vec.proj.T))
-                # init_disp = TransDisp(
-                    # s_vec,
-                    # zmat_obj,
-                    # options.disp,
-                    # eigs_init,
-                    # True,
-                    # options.disp_tol,
-                    # TED_obj,
-                    # options,
-                    # indices,
-                # )
                 fc_init = ForceConstant(
                     None,
                     [],
@@ -162,7 +131,7 @@ class Merger(object):
                     indices = np.array(indices).T
                 else:
                     indices = np.arange(len(eigs_init))
-
+                
                 init_disp = TransfDisp(
                     s_vec,
                     zmat_obj,
@@ -181,8 +150,6 @@ class Merger(object):
                 
                 # options.calc_init = False
                 if options.calc_init:
-                    # print("We don't want to compute anything here, change your calc_init keyword to false.")
-                    # raise RuntimeError
                     if os.path.exists(os.getcwd()+'/DispsInit'):
                         shutil.rmtree("DispsInit")
                     dir_obj_init = DirectoryTree(
@@ -199,11 +166,7 @@ class Merger(object):
                         deriv_level = self.options.deriv_level
                     )
                     dir_obj_init.run()
-                    # print(os.getcwd())
-                    # raise RuntimeError
-                    # os.chdir(rootdir + "/DispsInit")
                     disp_list = []
-                    # for i in os.listdir(rootdir + "/DispsInit"):
                     for i in os.listdir(os.getcwd()):
                         disp_list.append(i)
 
@@ -235,58 +198,27 @@ class Merger(object):
                         sub = Submit(disp_list, options)
                         sub.run()
 
-                # options.dir_reap = True
-                # os.chdir(rootdir + "/DispsInit")
-                # print("dir_rep in Merger")
-                # print(options.dir_reap)
+                print("deriv_level:")
+                print(self.options.deriv_level)
                 reap_obj_init = Reap(
-                    prog_name_init,
-                    zmat_obj,
-                    init_disp.disp_cart,
                     options,
-                    init_disp.n_coord,
                     eigs_init,
                     indices,
                     options.gradient_regex,
                     options.energy_regex_init,
+                    None,
                     options.success_regex_init,
                     deriv_level = self.options.deriv_level
                 )
                 reap_obj_init.energy_regex = energy_regex
                 reap_obj_init.success_regex = success_regex
-                # if os.path.exists(os.getcwd() + '/auxiliary'):
-                    # with open("auxiliary", "r") as file:
-                        # energies = json.load(file)
-                    # os.chdir('..')
-                    # ref_en_init = energies[0]
-                    # size = len(reap_obj_init.eigs)
-                    # p_en_array = np.zeros((size, size))
-                    # m_en_array = np.zeros((size, size))
-                    # for i in range(len(indices)):
-                        # j, k = indices[i][0], indices[i][1]
-                        # p_en_array[j, k] = energies[2*i+1]
-                        # m_en_array[j, k] = energies[2*i+2]
-                    # reap_obj_init.ref_en = ref_en_init
-                    # reap_obj_init.p_en_array = p_en_array
-                    # reap_obj_init.m_en_array = m_en_array
-                # elif options.calc_init:
                 if options.calc_init:
-                    # print(os.getcwd())
-                    # raise RuntimeError
-                    # options.dir_reap = True
-                    # if options.dir_reap:
-                    # os.chdir("DispsInit")
                     reap_obj_init.run()
                     os.chdir("..")
                 else:
                     os.chdir("DispsInit")
-                    # reap_obj_init.options.dir_reap = False
-                    # reap_obj_init.options.dir_reap = True
                     reap_obj_init.run()
                     os.chdir("..")
-                # if os.path.exists(os.getcwd() + '/auxiliary'):
-                    # shutil.move(os.getcwd() + '/auxiliary', os.getcwd()+'/..' + self.cma1_path +'/auxiliary')
-                
 
                 # nate
                 if not self.options.deriv_level:
@@ -332,6 +264,7 @@ class Merger(object):
                     False,
                     TED_obj,
                     options.units,
+                    False
                 )
                 f_conv_obj.N = len(fc_init.FC)
                 f_conv_obj.print_const(fc_name="fc_int_"+cma1_coord+".dat")
@@ -339,9 +272,6 @@ class Merger(object):
                 print(self.cma1_path)
                 shutil.move(os.getcwd() + "/fc_int_"+cma1_coord+".dat", os.getcwd()+"/.." + self.cma1_path +"/fc_int_"+cma1_coord+".dat")
 
-                # if os.path.exists(os.getcwd() + '/auxiliary'):
-                # print(os.getcwd())
-                # raise RuntimeError
                 os.chdir("..")
         
         if not init_bool:
@@ -354,8 +284,12 @@ class Merger(object):
                 False,
                 TED_obj,
                 options.units,
+                options.second_order
             )
-            f_conv_obj.run()
+            if options.second_order:
+                f_conv_obj.run(grad=g_read_obj.cart_grad)
+            else:
+                f_conv_obj.run()
             F = f_conv_obj.F
         else:
             F = fc_init.FC
@@ -396,18 +330,6 @@ class Merger(object):
                     [Gbuff3,                                        np.zeros((len(Gbuff3),len(Gbuff2[str(i+1)][0])))],
                     [np.zeros((len(Gbuff2[str(i+1)][0]),len(Gbuff3))), Gbuff2[str(i+1)][0]]
                     ])
-            # print(Fbuff3.shape)
-            # print("Elephant F")
-            # Fbuff3[np.abs(Fbuff3) < 1.0e-5] = 0 
-            # print(Fbuff3)
-            # print(Gbuff3.shape)
-            # print("Elephant G")
-            # Gbuff3[np.abs(Gbuff3) < 1.0e-10] = 0 
-            # print(Gbuff3)
-            # F[np.abs(F) > 1.0e-5] = 1 
-            # print(F)
-            # raise RuntimeError
-            
             F = Fbuff3
             g_mat.G = Gbuff3
 
@@ -463,15 +385,8 @@ class Merger(object):
         zmat_obj2 = Zmat(options)
         zmat_obj2.run(zmat_name="zmat2")
         
-        #print('final proj type')
-        #print(self.Proj)
-        #print('now printing ted obj projection thingy')
-        #print(TED_obj.proj)
-        #print('testing man_proj')
-        ### after allowing options.man_proj to = True, I match the redundant int coord script's frequencies exactly. This doesn't make sense
         print(options.man_proj)
         options.man_proj = True
-        #s_vec.run(zmat_obj2.cartesians_init, True, proj=Proj)
         
         
         s_vec = SVectors(
@@ -510,6 +425,7 @@ class Merger(object):
                 False,
                 TED_obj,
                 options.units,
+                False,
             )
             f_conv_obj.run()
             F = f_conv_obj.F
@@ -532,17 +448,13 @@ class Merger(object):
         if len(sym_sort) > 1:
             F = F[flat_sym_sort]
             F = F[:,flat_sym_sort]
-        # print(flat_sym_sort)
         print("Giraffe F")
-        # print(F)
         F[np.abs(F) < 1.0e-5] = 0 
         print(F)
-        # raise RuntimeError
         F = np.dot(np.dot(inv(eig_inv).T, F), inv(eig_inv))
-        #We shouldn't be zeroing out parts of the FC matrix just because they're small
-        #F[np.abs(F) < options.tol] = 0
+        # F[np.abs(F) < options.tol] = 0
          
-        init_GF = GFMethod(
+        full_GF = GFMethod(
             G,
             F,
             options.tol,
@@ -551,8 +463,15 @@ class Merger(object):
             TED_obj,
             False
         )
-        init_GF.run()
-        self.ted = init_GF.ted.TED      # TED matrix
+        full_GF.run()
+        self.ted = full_GF.ted.TED      # TED matrix
+        
+        # Print Full TED here in projected basis
+
+        print("////////////////////////////////////////////")
+        print("//{:^40s}//".format(" Full Hessian TED"))
+        print("////////////////////////////////////////////")
+        TED_obj.run(np.dot(init_GF.L, full_GF.L), full_GF.freq, rect_print=False)
         
         m = 2 
         var = 0.95 
@@ -582,22 +501,16 @@ class Merger(object):
         # print('temps')
         # print(temps)
         
-        #print('frequencies???')
-        self.reference_freq = init_GF.freq 
-        #for diagnostic 
+        self.reference_freq = full_GF.freq 
         if options.coords == 'Redundants':
-            L_B = init_GF.L
+            L_B = full_GF.L
         elif options.coords == 'Custom':
-            L_A = init_GF.L
+            L_A = full_GF.L
          
-        #L tensor tempering to normal mode basis
-        #$G = np.dot(np.dot(eig_inv, G), eig_inv.T)
-        #$F = np.dot(np.dot(inv(eig_inv).T, F), inv(eig_inv))
         
         def n_largest(n, FC):
             indexes = []
             upper_triang = abs(np.triu(FC,n))
-            #upper_triang = np.triu(FC,n)
             for i in range(0,n):
                 fc_cma2 = np.where(upper_triang == upper_triang.max())
                 index = [fc_cma2[0][0], fc_cma2[1][0]]
@@ -622,9 +535,7 @@ class Merger(object):
         
         print("Diagonal Force constant matrix in lower level normal mode basis:")
         print(Fdiag)
-        #print('G matrix requested by mitchell')
-        #print(G) 
-        init_GF = GFMethod(
+        diag_GF = GFMethod(
             G,
             Fdiag,
             options.tol,
@@ -634,38 +545,24 @@ class Merger(object):
             False
         )
         
-        init_GF.run()
+        diag_GF.run()
         if options.coords == 'Redundant':
-            self.Freq_redundant = init_GF.freq
+            self.Freq_redundant = diag_GF.freq
         elif options.coords == 'Custom':
-            self.Freq_custom = init_GF.freq
+            self.Freq_custom = diag_GF.freq
         elif options.coords == 'ZMAT' :
-            self.Freq_zmat = init_GF.freq
+            self.Freq_zmat = diag_GF.freq
         else:
             pass
         
-        self.Freq_cma2 = init_GF.freq
-        #print('merger needs to delete stuff as well')
-        #print(dir())
-        #everything below this line pertains to CMA2 off-diag elements being included in the GF matrix computation, its not an optimal setup, obviously
-        #plz fix it :( 
+        self.Freq_cma2 = diag_GF.freq
         
-        def n_largest(n, FC):
-            indexes = []
-            upper_triang = abs(np.triu(FC,1))
-            #print('this is the upper triang')
-            #print(upper_triang)
-            length = len(upper_triang)
-            for i in range(0,n):
-                index = np.argmax(upper_triang)
-                if index > length:
-                    two_d = [index // length, index % length]
-                else:
-                    two_d = [0,index]
-                indexes.append(two_d)
-                
-                upper_triang[two_d[0],two_d[1]] = 0
-            return indexes
+        # Print Diagonal TED here in projected basis
+
+        print("////////////////////////////////////////////")
+        print("//{:^40s}//".format(" CMA-0 TED"))
+        print("////////////////////////////////////////////")
+        TED_obj.run(np.dot(init_GF.L, diag_GF.L), diag_GF.freq, rect_print=False)
 
 
         if self.options.n_cma2 > 0:
@@ -686,7 +583,7 @@ class Merger(object):
                 print('temp')
                 print(temp)
             else:
-                extras = n_largest(self.options.n_cma2, np.abs(copy.copy(F)))
+                # extras = n_largest(self.options.n_cma2, np.abs(copy.copy(F)))
                 #91_ccsd extras = [[4,5],[10,11],[14,16]] 
                 #72_ccsd extras = [[4,5]]
                 #90_ccsd extras = [[15,17]]
@@ -695,15 +592,36 @@ class Merger(object):
                 #82_ccsd extras = [[14,15]]
                 #70_ccsd extras = [[10,11],[0,1]]
                 #85_ccsd extras = [[1,4],[3,5]]
+                extras = [[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7],[1,8],[2,3],[2,4],[2,5],[2,6],[2,7],[2,8],[3,4],[3,5],[3,6],[3,7],[3,8],[4,5],[4,6],[4,7],[4,8],[5,6],[5,7],[5,8],[6,7],[6,8],[7,8]]
+                # extras = [[0,1],[0,2],[0,3],[0,4],[0,5],[1,2],[1,3],[1,4],[1,5],[2,3],[2,4],[2,5],[3,4],[3,5],[4,5]]
+                # print(np.array(extras).shape)
+                # extras = [[0,1],[0,2],[0,3],[0,4],[1,2],[1,3],[1,4],[2,3],[2,4],[3,4]]
                 #extras = [[17,19]]
                 #extras = [[0,2]]
                 print('extras')
                 print(extras)
+                # raise RuntimeError
                 temp = copy.copy(Fdiag)
-                for z, extra in enumerate(extras):
-                    element = F[extra[0], extra[1]] 
-                    temp[extra[0], extra[1]] = element
-                    temp[extra[1], extra[0]] = element
+                if len(self.options.other_F_matrix) and os.path.exists(os.getcwd() + "/inter_fc.dat"):
+                    print(os.getcwd())
+                    f_read_obj_inter = FcRead("inter_fc.dat")
+                    f_read_obj_inter.run()
+                    F_inter = f_read_obj_inter.fc_mat
+                    F_inter = np.dot(np.dot(inv(eig_inv).T, F_inter), inv(eig_inv))
+                    print("F_inter:")
+                    print(F_inter)
+                    print("F_A:")
+                    print(F)
+                    # raise RuntimeError
+                    for z, extra in enumerate(extras):
+                        element = F_inter[extra[0], extra[1]] 
+                        temp[extra[0], extra[1]] = element
+                        temp[extra[1], extra[0]] = element
+                else:
+                    for z, extra in enumerate(extras):
+                        element = F[extra[0], extra[1]] 
+                        temp[extra[0], extra[1]] = element
+                        temp[extra[1], extra[0]] = element
                 print('CMA2 FC matrix')
                 print(temp) 
             #if options.coords == 'Redundant':
@@ -729,3 +647,21 @@ class Merger(object):
             init_GF.run()
             print('CMA2 including ' + str(z + 1) + ' off-diagonal bands/elements for ' + str(options.coords) + ' coordinates')
             print(init_GF.freq) 
+        
+        def n_largest(n, FC):
+            indexes = []
+            upper_triang = abs(np.triu(FC,1))
+            #print('this is the upper triang')
+            #print(upper_triang)
+            length = len(upper_triang)
+            for i in range(0,n):
+                index = np.argmax(upper_triang)
+                if index > length:
+                    two_d = [index // length, index % length]
+                else:
+                    two_d = [0,index]
+                indexes.append(two_d)
+                
+                upper_triang[two_d[0],two_d[1]] = 0
+            return indexes
+

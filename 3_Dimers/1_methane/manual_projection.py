@@ -33,16 +33,7 @@ class Projection(object):
         [0,  0,  0,  1, -1,  0],
         ]).T
 
-        Inter_Coords = np.array([
-        [1, 1, 1, 1, 1, 1],
-        [1,-1, 1,-1, 1,-1],
-        [2, 1,-1,-2,-1, 1],
-        [0, 1, 1, 0,-1,-1],
-        [2,-1,-1, 2,-1,-1],
-        [0, 1,-1, 0, 1,-1],
-        ]).T
-
-        Proj = block_diag(Sym_Stretches,Sym_Stretches,Inter_Coords,Bends,Bends)
+        Proj = block_diag(Sym_Stretches,Sym_Stretches,Uncoupled_Coord,Bends,Bends,Uncoupled_Coord,Uncoupled_Coord,Uncoupled_Coord,Uncoupled_Coord,Uncoupled_Coord)
         Proj = 1/norm(Proj,axis=0)*Proj
         
         self.Proj = Proj
