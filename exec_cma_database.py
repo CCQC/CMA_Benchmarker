@@ -25,8 +25,8 @@ np.set_printoptions(precision=4)
 
 # High and low levels of theory
 # Available: "CCSD_T_TZ", "CCSD_T_DZ", "B3LYP_6-31G_2df,p_"
-h_theory = ["CCSD_T_aTZ"]
-# h_theory = ["CCSD_T_TZ"]
+# h_theory = ["CCSD_T_aTZ"]
+h_theory = ["CCSD_T_TZ"]
 # l_theory = ["MP2_haTZ"]
 # l_theory = ["MP2_haDZ"]
 # l_theory = ["MP2_aTZ"]
@@ -37,8 +37,8 @@ h_theory = ["CCSD_T_aTZ"]
 # l_theory = ["CCSD_T_haDZ"]
 # l_theory = ["CCSD_T_aDZ"]
 # l_theory = ["CCSD_haTZ"]
-l_theory = ["CCSD_T_TZ"]
-# l_theory = ["CCSD_T_DZ"]
+# l_theory = ["CCSD_T_TZ"]
+l_theory = ["CCSD_T_DZ"]
 # l_theory = [
 # # "CCSD_aTZ",
 # # "CCSD_haTZ",
@@ -75,6 +75,7 @@ cma1_energy_regexes = ["\(T\)\s*t?o?t?a?l? energy\s+(\-\d+\.\d+)"]
 # "MP2_TZ"]
 
 # cma1_energy_regexes = ["CCSD\s*t?o?t?a?l? energy\s+(\-\d+\.\d+)"]
+cma1_gradient_regex = []
 # cma1_gradient_regex = ["\s*virial=\S\S+\.\d+E\S\d+\S\>\s+"]
 # cma1_energy_regexes = ["\(T\)\s*t?o?t?a?l? energy\s+(\-\d+\.\d+)","Grab this energy (\-\d+\.\d+)"]
 # cma1_energy_regexes = ["\(T\)\s*t?o?t?a?l? energy\s+(\-\d+\.\d+)",[r"Total Gradient",r"tstop"]]
@@ -111,7 +112,7 @@ coord_type = ["Nattys"]
 # paths = ['/1*','/2*']
 # job_list = ["4.31"]
 # job_list = ["1.104"]
-job_list = ["3.4"]
+job_list = ["0.1"]
 
 # Various output control statements
 n = 0                    # Number of CMA2 corrections (n = 0 -> CMA0)
@@ -128,8 +129,8 @@ compute_all = False       # run calculations for all or a select few
 # compute_all = True       # run calculations for all or a select few
 off_diag_bands = False   # (CMA2/3 ONLY) If set to true, "n" off-diag bands selected, if false, "n" largest fc will be selected
 deriv_level = 0         # (CMA1) if 0, compute initial hessian by singlepoints. If 1, compute initial hessian with findif of gradients
-second_order = True    # If True, read in cartesian gradient and force constant info to be converted to internal coordinates.
-# second_order = False    # If False, generate displacements to manually compute the CMA-0A internal coord force constants.
+# second_order = True    # If True, read in cartesian gradient and force constant info to be converted to internal coordinates.
+second_order = False    # If False, generate displacements to manually compute the CMA-0A internal coord force constants.
 
 
 # =====================

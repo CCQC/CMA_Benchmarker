@@ -204,9 +204,8 @@ class Merger(object):
                     options,
                     eigs_init,
                     indices,
-                    options.gradient_regex,
                     options.energy_regex_init,
-                    None,
+                    options.gradient_regex,
                     options.success_regex_init,
                     deriv_level = self.options.deriv_level
                 )
@@ -444,6 +443,12 @@ class Merger(object):
         print(G)
         G = np.dot(np.dot(eig_inv, G), eig_inv.T)
         # G[np.abs(G) < options.tol] = 0
+        # print("Nat F:")
+        # F[np.abs(F) < 1.0e-5] = 0 
+        # print(F)
+        # Conversion to aJ/Ang
+        # F *= 4.3597447222071
+        # F /= 0.529177210903
         F = np.dot(np.dot(TED_obj.proj.T,F),TED_obj.proj)
         if len(sym_sort) > 1:
             F = F[flat_sym_sort]
