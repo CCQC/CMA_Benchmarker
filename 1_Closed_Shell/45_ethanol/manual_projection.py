@@ -39,7 +39,7 @@ class Projection(object):
         ]).T)
 
         CH_ang2 = normalize(np.array([
-        [2,-1,-1,-1,-1],
+        [4,-1,-1,-1,-1],
         [0, 1, 1,-1,-1],
         [0, 1,-1, 1,-1],
         [0, 1,-1,-1, 1],
@@ -54,6 +54,11 @@ class Projection(object):
         Proj = block_diag(HA_str,CH_str1,CH_str2,HA_ang,CH_ang1,CH_ang2,tor1,tor2)
 
         self.Proj = Proj
+        
+        self.sym_sort = np.array([
+            [0,1,2,3,4,6,8,9,10,11,13,15,17],
+            [5,7,12,14,16,18,19,20],
+            ],dtype=object)
 
 def normalize(mat):
     return 1/norm(mat,axis=0)*mat

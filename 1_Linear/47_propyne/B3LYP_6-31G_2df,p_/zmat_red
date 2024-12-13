@@ -17,16 +17,10 @@ ZMAT begin
 5 4 3 2 Lx
 6 4 3 2 Lx
 7 4 3 2 Lx
-5 4 3 2 Ly
-6 4 3 2 Ly
-7 4 3 2 Ly
 
 5 4 2 1 Lx
 6 4 2 1 Lx
 7 4 2 1 Lx
-5 4 2 1 Ly
-6 4 2 1 Ly
-7 4 2 1 Ly
 ZMAT end
 
 cart begin
