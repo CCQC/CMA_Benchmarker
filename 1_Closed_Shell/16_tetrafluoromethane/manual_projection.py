@@ -47,6 +47,14 @@ class Projection(object):
         Proj = block_diag(str1, ang)
         # Proj = block_diag(str1, ang1, ang2)
         
+        self.sym_sort = np.array([
+            [0],
+            [],
+            [4,5],
+            [],
+            [1,2,3,6,7,8],
+            ],dtype=object)
+        
         
         self.Proj = Proj                     
 

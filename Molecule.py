@@ -101,6 +101,7 @@ class Molecule(object):
         #     print("-"*(13+10*len(self.ted[ted]))+"\n")
 
     def get_geoms(self, combo):
+        combo = [combo[0]]
         cma1 = False
         if combo[0] not in os.listdir():
             cma1 = True
@@ -174,8 +175,6 @@ class Molecule(object):
                 else:
                     zmat.append(line.split())
         
-        # print("zmat:")
-        # print(zmat)
         # Format zmat to be more readable
         for i, coord in enumerate(zmat):
             zmat[i] = ZCoord(coord)
@@ -193,7 +192,7 @@ class Molecule(object):
 
         self.nics = nics
 
-    def build_latex_output(self,cma1=False):
+    def build_latex_output(self,cma1=False,combos=[],xi_tol=[],sym_sort=[]):
         txt = f"\\subsection{{\ \ \ \\ce{{{self.name}}}}}\n\n"
 
         # Geometries
@@ -341,10 +340,43 @@ class Molecule(object):
         temp_freqs = {}
         for key in self.freqs:
             keys.append(key)
-            if key == "Ref (CCSD_T_DZ)":
-                labels.append(("Reference","CCSD(T)/","cc-pVDZ"))
-            if key == "Ref (B3LYP_6-31G_2df,p_)":
-                labels.append(("Reference","B3LYP/","6-31G(2df,p)"))
+            if key == "Ref (CCSD_T_TZ)":
+                labels.append(("Reference","CCSD(T)/","cc-pVTZ"))
+            if key == "Initial (CCSD_T_DZ)":
+                labels.append(("Initial","CCSD(T)/","cc-pVDZ"))
+            if key == "Initial (MP2_TZ)":
+                labels.append(("Initial","MP2/","cc-pVTZ"))
+            if key == "Initial (B3LYP_6-31G_2df,p_)":
+                labels.append(("Initial","B3LYP/","6-31G(2df,p)"))
+            if len(xi_tol):
+                for k in range(len(xi_tol)):
+                    if key == f"Natty CMA2 (MP2_TZ) xi ({xi_tol[k]})":
+                        if cma1:
+                            labels.append(("CMA-2A","MP2/",f"cc-pVTZ"))
+                            # labels.append(("CMA-2A","MP2/",f"cc-pVTZ xi ({xi_tol[k]})"))
+                        else:
+                            labels.append(("CMA-2B","MP2/",f"cc-pVTZ"))
+                            # labels.append(("CMA-2B","MP2/",f"cc-pVTZ xi ({xi_tol[k]})"))
+                    if key == f"Natty CMA2 (CCSD_T_DZ) xi ({xi_tol[k]})":
+                        if cma1:
+                            labels.append(("CMA-2A","CCSD(T)/",f"cc-pVDZ"))
+                            # labels.append(("CMA-2A","CCSD(T)/",f"cc-pVDZ xi ({xi_tol[k]})"))
+                        else:
+                            labels.append(("CMA-2B","CCSD(T)/",f"cc-pVDZ"))
+                            # labels.append(("CMA-2B","CCSD(T)/",f"cc-pVDZ xi ({xi_tol[k]})"))
+                    if key == f"Natty CMA2 (B3LYP_6-31G_2df,p_) xi ({xi_tol[k]})":
+                        if cma1:
+                            labels.append(("CMA-2A","B3LYP/",f"6-31G(2df,p)"))
+                            # labels.append(("CMA-2A","B3LYP/",f"6-31G(2df,p) xi ({xi_tol[k]})"))
+                        else:
+                            labels.append(("CMA-2B","B3LYP/",f"6-31G(2df,p)"))
+                            # labels.append(("CMA-2B","B3LYP/",f"6-31G(2df,p) xi ({xi_tol[k]})"))
+                    # for combo in combos:
+                        # if key == f"Natty CMA2 ({combo[1]}) xi ({xi_tol[k]})":
+                            # if cma1:
+                                # labels.append(("CMA-2A","NCs",f"{combo[1]} xi ({xi_tol[k]})"))
+                            # else:
+                                # labels.append(("CMA-2B","NCs",f"{combo[1]} xi ({xi_tol[k]})"))
             if key == "Natty (CCSD_T_DZ)":
                 # labels.append(("CMA0","NCs","TZ/DZ"))
                 if cma1:
@@ -436,27 +468,44 @@ class Molecule(object):
                 else:
                     labels.append(("CMA-0B","DCs","B3LYP"))
             
-            if i > 7 or j + 1 == len(self.freqs):
+            if i > 5 or j + 1 == len(self.freqs):
                 txt += (
                     "\\begin{table}[h!]\n"
                     # "\\subsubsection*{Frequencies}\n"
                     "\\centering\n")
-                print(self.freqs)
-                print(labels)
-                print(keys)
-                # print(self.freqs[keys])
                 for k in range(len(keys)):
-                    print(keys[k])
-                    print(self.freqs[keys[k]])
                     temp_freqs[keys[k]] = self.freqs[keys[k]]
-                print(temp_freqs)
-                ind = pd.MultiIndex.from_tuples(labels) 
+                ind = pd.MultiIndex.from_tuples(labels)
                 fdf = pd.DataFrame(data=temp_freqs)
                 # fdf = pd.DataFrame(data=self.freqs)
                 fdf.columns = ind
-                fdf.index += 1
+                indices = []
+                # indices2 = []
+                # indices = [str(x+1) for x in range(len(self.freqs[keys[0]]))]
+                if len(sym_sort):
+                    k = 0
+                    l = 0
+                    for irrep in sym_sort:
+                        if len(irrep) > 1:
+                            for m in range(len(irrep)):
+                                indices.append(f'$\omega_{{{l+m+1}}}$({k})')
+                            k += 1
+                        l += len(irrep)
+                else:
+                    for k in range(len(self.freqs[keys[0]])):
+                        indices.append(f'$\omega_{{{k+1}}}$')
+                    indices.reverse()
+
+                fdf.index = indices
                 
-                txt += "\\caption{Harmonic frequencies for reference and CMA0 data targeting the CCSD(T)/aug-cc-pVTZ level of theory.}\n"
+                # fdf = fdf.rename('\omega_{}({})'.format).index
+                # fdf = fdf.T.rename('\omega_{}({})'.format,axis=0).T
+                # fdf.set_index('\omega_{' + fdf.index + '}')
+                # fdf.index.rename('\omega_{}'.format)
+                # fdf.set_index('\omega_{'+fdf.index.astype(str)+'}')
+                
+                txt += "\\caption{Harmonic frequencies for reference and CMA0 data targeting the CCSD(T)/cc-pVTZ level of theory. For all CMA2 frequencies, xi = 0.02.}\n"
+                # txt += "\\caption{Harmonic frequencies for reference and CMA0 data targeting the CCSD(T)/aug-cc-pVTZ level of theory.}\n"
                 # if cma1:
                     # txt += "\\caption{Harmonic frequencies for reference and CMA1 data.}\n"
                 # else:
@@ -493,7 +542,7 @@ class Molecule(object):
                     tmp += f" {sign} {out}"
                 else:
                     tmp += f" {sign} {abs(term[0])}{out}"
-                if (j % 10) + 1 == 10:
+                if (j % 10) + 1 == 10 and j + 1 != len(nic[1:]):
                     tmp += ("$ \\\\\n"
                             " & $")
             tmp += "$ \\\\\n"
@@ -552,8 +601,6 @@ class ZCoord(object):
 
     def __init__(self,ind):
         # Identify coordinate type
-        # print("ZCoord Ind:")
-        # print(ind)
         if len(ind) == 2:
             self.ind = ",".join(ind)
             self.coord_out = f"r({self.ind})"

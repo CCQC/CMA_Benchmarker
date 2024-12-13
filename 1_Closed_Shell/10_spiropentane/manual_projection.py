@@ -104,7 +104,7 @@ class Projection(object):
             28,
             31,
             32]
-            ])
+            ],dtype=object)
 
 def normalize(mat):
     return 1/norm(mat,axis=0)*mat

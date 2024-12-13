@@ -41,3 +41,7 @@ class Projection(object):
         
         
         self.Proj = Proj                     
+        self.sym_sort = np.array([
+            [0,1,2,4,5,6,7,9],
+            [3,8,10,11],
+            ],dtype=object)

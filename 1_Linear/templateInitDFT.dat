@@ -295,6 +295,6 @@ dft_spherical_points 1202
 dft_radial_points 99
 }
 
-e = energy('b3lyp')
+e = energy('hf')
 
 print_out('Grab this energy {0}'.format(e))

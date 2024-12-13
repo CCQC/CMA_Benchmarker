@@ -14,7 +14,7 @@ class Projection(object):
         self.options = options
 
     def run(self):
-
+        # 0-2
         HA_str = normalize(np.array([
         [1, 1, 1],
         [2,-1,-1],
@@ -29,7 +29,8 @@ class Projection(object):
         # [2,-2,-1, 1,-1, 1],
         # [0, 0, 1,-1,-1, 1],
         # ]).T)
-       
+
+        # 3-8
         CH_str = normalize(np.array([
         [1, 1, 1, 1, 1, 1],
         [2, 2,-1,-1,-1,-1],
@@ -39,6 +40,7 @@ class Projection(object):
         [0, 0, 1,-1,-1, 1],
         ]).T)
        
+        # 9-20
         CH_ang = normalize(np.array([
         [4,-1,-1,-1,-1, 4,-1,-1,-1,-1, 4,-1,-1,-1,-1],
         [8,-2,-2,-2,-2,-4, 1, 1, 1, 1,-4, 1, 1, 1, 1],
@@ -57,6 +59,15 @@ class Projection(object):
         Proj = block_diag(HA_str,CH_str,CH_ang)
 
         self.Proj = Proj
+
+        self.sym_sort = np.array([
+            [0,3,9],
+            [15],
+            [1,2,4,5,10,11,16,17],
+            [18],
+            [6,12],
+            [7,8,13,14,19,20],
+            ],dtype=object)
 
 def normalize(mat):
     return 1/norm(mat,axis=0)*mat

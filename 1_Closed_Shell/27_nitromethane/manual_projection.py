@@ -47,6 +47,10 @@ class Projection(object):
         oop = np.eye(1)
 
         Proj = block_diag(HA_stretch,stretch,HA_angles,angles,tor,oop)
+        self.sym_sort = np.array([
+            [0,1,3,4,6,8,9,11,14],
+            [2,5,7,10,12,13],
+            ],dtype=object)
 
         self.Proj = Proj
 

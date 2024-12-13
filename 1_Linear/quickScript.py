@@ -8,9 +8,26 @@ dirs = os.listdir(here)
 for i in dirs:
     if os.path.isdir(os.getcwd() + "/" + i):
         os.chdir(i)
+        # path = os.getcwd()
+        # if not os.path.exists(path + "/HF_DZ"):
+            # sh.copytree(path + "/CCSD_T_DZ",path + "/HF_DZ")
+        # if not os.path.exists(path + "/HF_TZ"):
+            # sh.copytree(path + "/CCSD_T_DZ",path + "/HF_TZ")
         os.chdir("CCSD_T_TZ")
-        print(i)
+        path = os.getcwd()
+        print(path)
+        # if not os.path.exists(path + "/Disps_HF_DZ"):
+            # os.mkdir(path + "/Disps_HF_DZ")
+        # if os.path.exists(path + "/Disps_CCSD_T_DZ/DispsInit") and not os.path.exists(path + "/Disps_HF_DZ/DispsInit"):
+            # sh.copytree(path + "/Disps_CCSD_T_DZ/DispsInit",path + "/Disps_HF_DZ/DispsInit")
+        if os.path.exists(path + "/Disps_CCSD_T_DZ/fc_int_nat.dat"):
+            sh.move(path + "/Disps_CCSD_T_DZ/fc_int_nat.dat",path + "/Disps_CCSD_T_DZ/_fc_int_nat.dat")
+        # if not os.path.exists(path + "/Disps_HF_TZ"):
+            # os.mkdir(path + "/Disps_HF_TZ")
+        # if os.path.exists(path + "/Disps_MP2_TZ/DispsInit") and not os.path.exists(path + "/Disps_HF_TZ/DispsInit"):
+            # sh.copytree(path + "/Disps_MP2_TZ/DispsInit",path + "/Disps_HF_TZ/DispsInit")
+        if os.path.exists(path + "/Disps_MP2_TZ/fc_int_nat.dat"):
+            sh.move(path + "/Disps_MP2_TZ/fc_int_nat.dat",path + "/Disps_MP2_TZ/fc_int_nat.dat")
         # sh.copy(os.getcwd() + '/' + 'zmat',os.getcwd() + '/' + 'zmat_cma1')
-        sh.copy(os.getcwd() + '/' + 'zmat_cma1',os.getcwd() + '/' + 'zmat_cma1_Final')
         os.chdir('..')
         os.chdir('..')

@@ -25,6 +25,12 @@ class Projection(object):
         angles = angles.T
         #F-C combos, C-O, degen irreps 
         Proj = block_diag(mix_mat,np.eye(1),angles,np.eye(1))
-        print('inside projection mat')
-        print(Proj) 
-        self.Proj = Proj                     
+        self.Proj = Proj                    
+
+        self.sym_sort = np.array([
+            [0,2,3],
+            [],
+            [5],
+            [1,4],
+            ],dtype=object)
+

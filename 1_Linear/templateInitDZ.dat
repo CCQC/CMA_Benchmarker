@@ -9,6 +9,6 @@ geomtyp=xyz
  geometry = {
 }
 
-basis=cc-pvdz
+basis=cc-pvtz
 {rhf;maxit,200}
-{ccsd(t);maxit,200}
+{ccsd;maxit,200}
