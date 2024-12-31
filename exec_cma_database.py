@@ -41,42 +41,11 @@ h_theory = ["CCSD_T_TZ"]
 # l_theory = ["MP2_TZ","df_MP2_TZ","HF_TZ","B3LYP_6-31G_2df,p_","CCSD_T_DZ","CCSD_DZ","MP2_DZ","HF_DZ"]
 
 # l_theory = ["CCSD_T_DZ","MP2_TZ"]
-# l_theory = ["HF_DZ","HF_TZ"]
-# l_theory = ["HF_TZ"]
-# l_theory = ["MP2_DZ"]
-# l_theory = ["MP2_aDZ"]
-# l_theory = ["MP2_aDZ"]
 # l_theory = ["MP2_TZ","CCSD_T_DZ","B3LYP_6-31G_2df,p_"]
-# l_theory = ["df_MP2_TZ"]
 l_theory = ["MP2_TZ"]
-# l_theory = ["CCSD_T_haTZ"]
-# l_theory = ["CCSD_T_haDZ"]
-# l_theory = ["CCSD_T_aDZ"]
-# l_theory = ["CCSD_T_aTZ"]
-# l_theory = ["CCSD_haTZ"]
-# l_theory = ["CCD_TZ"]
-# l_theory = ["CCSD_DZ"]
-# l_theory = ["CCSD_T_TZ"]
-# l_theory = ["HF_DZ"]
 # l_theory = ["CCSD_T_DZ"]
-# l_theory = ["CCSD_TZ"]
-# l_theory = ["HF_6-31G_2df,p_"]
 # l_theory = ["B3LYP_6-31G_2df,p_"]
 # l_theory = [
-# # "CCSD_aTZ",
-# # "CCSD_haTZ",
-# "CCSD_T_aDZ",
-# "CCSD_T_DZ",
-# "CCSD_T_haDZ",
-# "CCSD_T_haTZ",
-# "CCSD_T_TZ",
-# "MP2_aDZ",
-# "MP2_aTZ",
-# "MP2_DZ",
-# "MP2_haDZ",
-# "MP2_haTZ",
-# "MP2_TZ"]
-
 # l_theory = ["CCSD_T_DZ", "B3LYP_6-31G_2df,p_"]
 combos = list(product(h_theory,l_theory))
 
@@ -91,14 +60,14 @@ combos = list(product(h_theory,l_theory))
 # cma1_energy_regexes = ["!RHF-UCCSD\s*t?o?t?a?l? energy\s+(\-\d+\.\d+)"]
 # cma1_energy_regexes = ["CCSD\s*t?o?t?a?l? energy\s+(\-\d+\.\d+)"]
 # cma1_energy_regexes = ["\s+MP2\s*t?o?t?a?l?\s*energy:\s+(\-\d+\.\d+)"]
-# cma1_energy_regexes = ["!MP2\s*t?o?t?a?l?\s*energy\s+(\-\d+\.\d+)"]
+cma1_energy_regexes = ["!MP2\s*t?o?t?a?l?\s*energy\s+(\-\d+\.\d+)"]
 # cma1_energy_regexes = ["MP4\(SDTQ\(T\)\s*t?o?t?a?l? energy\s+(\-\d+\.\d+)"]
 # cma1_energy_regexes = ["MP3\s*t?o?t?a?l? energy\s+(\-\d+\.\d+)"]
 # cma1_energy_regexes = ["!RMP2 STATE 1.\d+ Energy\s+(\-\d+\.\d+)"]
 # cma1_energy_regexes = ["!UMP2 STATE 1.\d+ Energy\s+(\-\d+\.\d+)"]
 # cma1_energy_regexes = ["\(T\)\s*t?o?t?a?l? energy\s+(\-\d+\.\d+)","!RMP2 STATE 1.\d+ Energy\s+(\-\d+\.\d+)"]
 # cma1_energy_regexes = ["!RHF STATE 1.\d+ Energy\s+(\-\d+\.\d+)","!RHF STATE 1.\d+ Energy\s+(\-\d+\.\d+)"]
-cma1_energy_regexes = ["!RHF STATE 1.\d+ Energy\s+(\-\d+\.\d+)"]
+# cma1_energy_regexes = ["!RHF STATE 1.\d+ Energy\s+(\-\d+\.\d+)"]
 # cma1_energy_regexes = ["\(T\)\s*t?o?t?a?l? energy\s+(\-\d+\.\d+)","MP2\s*t?o?t?a?l? energy\s+(\-\d+\.\d+)"]
 # cma1_energy_regexes = ["\(T\)\s*t?o?t?a?l? energy\s+(\-\d+\.\d+)"]
 # cma1_energy_regexes = ["Grab this energy\s+(\-\d+\.\d+)"]
@@ -166,7 +135,7 @@ coord_type = ["Nattys"]
 # job_list = ["3.4"]
 # job_list = ["4.10"]
 # job_list = ["2.18"]
-job_list = ["1.91"]
+job_list = ["4.05"]
 # job_list = ["0.2"]
 # exclude_list = ["1.91","1.57"]
 # exclude_list = ["1.91","1.57","2.14"]
@@ -187,7 +156,7 @@ n = 0                    # Number of CMA2 corrections (n = 0 -> CMA0)
 # xi_tol = [10.0, 3.0, 2.0, 0.20, 0.07, 0.04, 0.03, 0.025, 0.022, 0.018, 0.01, 0.005, 0.004, 0.003, 0.0002, 0.0001, 1e-05, 1e-06, 1e-07, 1e-08, 1e-09]    # Xi values for B3LYP/6-31G(2df,p) fig
 # xi_tol = []    # Xi value for cutoff in determining CMA2 off diags
 xi_tol = [0.04]    # Xi value for cutoff in determining CMA2 off diags
-od_inds = [[16,17]]         # Contains a list of lists, where the sublists contain off-diagonal elements to be computed in CMA-1
+od_inds = [[19,20],[6,8]]         # Contains a list of lists, where the sublists contain off-diagonal elements to be computed in CMA-1
 # cmaA = False             # Run CMA1 instead of CMA0
 cmaA = True             # Run CMA1 instead of CMA0
 csv = False               # Generate database .csv file
@@ -198,14 +167,14 @@ compute_all = False       # run calculations for all or a select few
 # compute_all = True       # run calculations for all or a select few
 # off_diag_bands = False   # (CMA2/3 ONLY) If set to true, "n" off-diag bands selected, if false, "n" largest fc will be selected
                            # off_diag_bands is now an obsolete option
-# off_diag = 0   # Set this option for CMA0
+off_diag = 0   # Set this option for CMA0
 # off_diag = 1   # Set this option for CMA1. Additional off-diagonal elements will need to be specified using ___.
-off_diag = 2   # Set this option for CMA2. Off-diags will be auto generated, but an aux hessian will need be specified using ___.
+# off_diag = 2   # Set this option for CMA2. Off-diags will be auto generated, but an aux hessian will need be specified using ___.
 deriv_level = 0         # (CMA1) if 0, compute initial hessian by singlepoints. If 1, compute initial hessian with findif of gradients
-# second_order = True    # If True, read in cartesian gradient and force constant info to be converted to internal coordinates.
-second_order = False    # If False, generate displacements to manually compute the CMA-0A internal coord force constants.
-# coord_type_init = "cartesian" # Toggle this for type of coordinate used in inital force constant computations
-coord_type_init = "internal" # Toggle this for type of coordinate used in inital force constant computations
+second_order = True    # If True, read in cartesian gradient and force constant info to be converted to internal coordinates.
+# second_order = False    # If False, generate displacements to manually compute the CMA-0A internal coord force constants.
+coord_type_init = "cartesian" # Toggle this for type of coordinate used in inital force constant computations
+# coord_type_init = "internal" # Toggle this for type of coordinate used in inital force constant computations
 
 # =====================
 # Some useful functions

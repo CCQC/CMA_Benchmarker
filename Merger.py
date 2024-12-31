@@ -25,6 +25,7 @@ from concordantmodes.options import Options
 from concordantmodes.reap import Reap
 from concordantmodes.s_vectors import SVectors
 from concordantmodes.submit import Submit
+from concordantmodes.symmetry import Symmetry
 from concordantmodes.ted import TED
 from concordantmodes.transf_disp import TransfDisp
 from concordantmodes.vulcan_template import VulcanTemplate
@@ -75,6 +76,18 @@ class Merger(object):
         rootdir = os.getcwd()
         zmat_obj = Zmat(self.options)
         zmat_obj.run()
+
+        #Do we want to use symmetry? Default is False
+        self.symm_obj = Symmetry(zmat_obj, self.options)
+        if self.options.symmetry:
+            self.symm_obj.run()
+        else:
+            """
+            We won't run the symmetry code, but we'll create a dummy object to be passed as an argument.
+            #TODO: This is a hacky way to do this, but it's a quick fix for now. Maybe reincorporate symmetry as a s_vector obj?
+            """
+            self.symm_obj.dummy_obj()
+            self.symm_obj.symtext = None 
 
         np.set_printoptions(edgeitems=60,linewidth=1000)
         
@@ -330,7 +343,6 @@ class Merger(object):
                     ref_en_init,
                     self.options,
                     indices,
-                    reap_obj_init,
                     deriv_level=self.options.deriv_level,
                     coord_type_init=coord_type_init
                 )
@@ -350,7 +362,6 @@ class Merger(object):
                         ref_en_init,
                         self.options,
                         indices,
-                        reap_obj_init,
                         deriv_level=1
                     )
                     grad_init.run()
@@ -476,6 +487,8 @@ class Merger(object):
             self.options.proj_tol,
             zmat_obj,
             TED_obj,
+            self.options,
+            self.symm_obj.symtext,
             False
         )
         init_GF.run()
@@ -510,6 +523,8 @@ class Merger(object):
             self.options.proj_tol,
             zmat_obj,
             TED_obj,
+            self.options,
+            self.symm_obj.symtext,
             False
         )
         TED_GF.run()
@@ -624,6 +639,8 @@ class Merger(object):
             self.options.proj_tol,
             zmat_obj2,
             TED_obj,
+            self.options,
+            self.symm_obj.symtext,
             False
         )
         full_GF.run()
@@ -688,6 +705,8 @@ class Merger(object):
             self.options.proj_tol,
             zmat_obj2,
             TED_obj,
+            self.options,
+            self.symm_obj.symtext,
             False
         )
         
