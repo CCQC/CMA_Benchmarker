@@ -28,6 +28,7 @@ class Projection(object):
             # [0.5,0.5,-0.5,-0.5],
             # [0.5,-0.5,0.5,-0.5]
         # ])
+        # 5-8
         angles_mat = normalize(np.array([
             [ 1,-1, 0, 1,-1, 0],
             [ 1,-1, 0,-1, 1, 0],
@@ -50,6 +51,12 @@ class Projection(object):
         
         
         self.Proj = Proj                     
+        self.sym_sort = np.array([
+            [0,1,3,5,7],
+            [11],
+            [9,10],
+            [2,4,6,8],
+            ],dtype=object)
 
 def normalize(mat):
     return 1/norm(mat,axis=0)*mat

@@ -23,6 +23,7 @@ class Molecule(object):
             self.section = "\\section{Dimers}\n\n"
         self.geoms = {}
         self.freqs = {}
+        self.resid = {}
         self.ted = {}
         self.h_theory = h_theory
         self.proj = None
@@ -53,6 +54,17 @@ class Molecule(object):
         df.columns = ind
         print(df.to_string(index=False, float_format="%.2f"))
         print()
+        
+        print("Residuals:")
+        print("------------")
+        # Creat multiline index
+        r = [(head.split()[0], head.split()[1]) for head in self.resid.keys()] 
+        indr = pd.MultiIndex.from_tuples(r)
+        dfr = pd.DataFrame(data=self.resid)
+        dfr.columns = indr
+        print(dfr.to_string(index=False, float_format="%.2f"))
+        print()
+        # raise RuntimeError
 
         # Nattys
         print("Nattys:")
@@ -101,16 +113,17 @@ class Molecule(object):
         #     print("-"*(13+10*len(self.ted[ted]))+"\n")
 
     def get_geoms(self, combo):
-        cma1 = False
+        combo = [combo[0]]
+        cmaA = False
         if combo[0] not in os.listdir():
-            cma1 = True
+            cmaA = True
         for lvl in combo:
             if lvl in self.geoms.keys():
-                if cma1 == True:
+                if cmaA == True:
                     break
                 else:
                     continue
-            if cma1 == True:
+            if cmaA == True:
                 filename = f"./zmat"
             else:
                 filename = f"./{lvl}/zmat"
@@ -135,7 +148,7 @@ class Molecule(object):
                 if read == True:
                     cart.append(line.split())
             self.geoms[lvl] = cart
-            if cma1 == True:
+            if cmaA == True:
                 break
 
     def get_nattys(self,combo):
@@ -154,7 +167,20 @@ class Molecule(object):
                 break
             if re.search(r"\d+", line):
                 if re.search(r";", line):
+                    # print(line)
                     line = line.split(";")[1:]
+                    # print(line)
+                    line_len = len(line)
+                    for i in range(line_len):
+                        print(line[i])
+                        line[i] = line[i].replace(" ","\ ")
+                        line[i] = line[i].replace("\ T"," T")
+                        line[i] = line[i].replace("\ O"," O")
+                        line[i] = line[i].replace("\ L"," L")
+                        line[i] = line[i].replace("\ Lx"," Lx")
+                        line[i] = line[i].replace("\ Ly"," Ly")
+                    # print(line)
+                    # raise RuntimeError
                     if len(line) == 4:
                         last = line[3].split()
                         if len(last[0]):
@@ -174,8 +200,7 @@ class Molecule(object):
                 else:
                     zmat.append(line.split())
         
-        # print("zmat:")
-        # print(zmat)
+        # raise RuntimeError
         # Format zmat to be more readable
         for i, coord in enumerate(zmat):
             zmat[i] = ZCoord(coord)
@@ -193,7 +218,7 @@ class Molecule(object):
 
         self.nics = nics
 
-    def build_latex_output(self,cma1=False):
+    def build_latex_output(self,cmaA=False,combos=[],xi_tol=[],sym_sort=[]):
         txt = f"\\subsection{{\ \ \ \\ce{{{self.name}}}}}\n\n"
 
         # Geometries
@@ -203,7 +228,7 @@ class Molecule(object):
                 # "\\subsubsection*{Geometries}\n"
                 # "\\begin{multicols}{2}\n"
                 # "\\centering\n") 
-        if cma1:
+        if cmaA:
             g = self.h_theory[0]
             txt += ("\\begin{table}[h!]\n"
                     "\\centering\n")
@@ -341,123 +366,188 @@ class Molecule(object):
         temp_freqs = {}
         for key in self.freqs:
             keys.append(key)
-            if key == "Ref (CCSD_T_DZ)":
-                labels.append(("Reference","CCSD(T)/","cc-pVDZ"))
-            if key == "Ref (B3LYP_6-31G_2df,p_)":
-                labels.append(("Reference","B3LYP/","6-31G(2df,p)"))
+            if key == "Ref (CCSD_T_TZ)":
+                labels.append(("Reference","CCSD(T)/","cc-pVTZ"))
+            if key == "Initial (CCSD_T_DZ)":
+                labels.append(("Initial","CCSD(T)/","cc-pVDZ"))
+            if key == "Initial (MP2_TZ)":
+                labels.append(("Initial","MP2/","cc-pVTZ"))
+            if key == "Initial (B3LYP_6-31G_2df,p_)":
+                labels.append(("Initial","B3LYP/","6-31G(2df,p)"))
+            if len(xi_tol):
+                for k in range(len(xi_tol)):
+                    if key == f"Natty CMA2 (MP2_TZ) xi ({xi_tol[k]})":
+                        if cmaA:
+                            labels.append(("CMA-2A","MP2/",f"cc-pVTZ"))
+                            # labels.append(("CMA-2A","MP2/",f"cc-pVTZ xi ({xi_tol[k]})"))
+                        else:
+                            labels.append(("CMA-2B","MP2/",f"cc-pVTZ"))
+                            # labels.append(("CMA-2B","MP2/",f"cc-pVTZ xi ({xi_tol[k]})"))
+                    if key == f"Natty CMA2 (CCSD_T_DZ) xi ({xi_tol[k]})":
+                        if cmaA:
+                            labels.append(("CMA-2A","CCSD(T)/",f"cc-pVDZ"))
+                            # labels.append(("CMA-2A","CCSD(T)/",f"cc-pVDZ xi ({xi_tol[k]})"))
+                        else:
+                            labels.append(("CMA-2B","CCSD(T)/",f"cc-pVDZ"))
+                            # labels.append(("CMA-2B","CCSD(T)/",f"cc-pVDZ xi ({xi_tol[k]})"))
+                    if key == f"Natty CMA2 (B3LYP_6-31G_2df,p_) xi ({xi_tol[k]})":
+                        if cmaA:
+                            labels.append(("CMA-2A","B3LYP/",f"6-31G(2df,p)"))
+                            # labels.append(("CMA-2A","B3LYP/",f"6-31G(2df,p) xi ({xi_tol[k]})"))
+                        else:
+                            labels.append(("CMA-2B","B3LYP/",f"6-31G(2df,p)"))
+                            # labels.append(("CMA-2B","B3LYP/",f"6-31G(2df,p) xi ({xi_tol[k]})"))
+                    # for combo in combos:
+                        # if key == f"Natty CMA2 ({combo[1]}) xi ({xi_tol[k]})":
+                            # if cmaA:
+                                # labels.append(("CMA-2A","NCs",f"{combo[1]} xi ({xi_tol[k]})"))
+                            # else:
+                                # labels.append(("CMA-2B","NCs",f"{combo[1]} xi ({xi_tol[k]})"))
             if key == "Natty (CCSD_T_DZ)":
                 # labels.append(("CMA0","NCs","TZ/DZ"))
-                if cma1:
+                if cmaA:
                     labels.append(("CMA-0A","NCs","(T)/DZ"))
                 else:
                     labels.append(("CMA-0B","NCs","(T)/DZ"))
             if key == "Natty (CCSD_T_TZ)":
                 # labels.append(("CMA0","NCs","TZ/DZ"))
-                if cma1:
+                if cmaA:
                     labels.append(("CMA-0A","NCs","(T)/TZ"))
                 else:
                     labels.append(("CMA-0B","NCs","(T)/TZ"))
             if key == "Natty (CCSD_T_haDZ)":
                 # labels.append(("CMA0","NCs","TZ/DZ"))
-                if cma1:
+                if cmaA:
                     labels.append(("CMA-0A","NCs","(T)/haDZ"))
                 else:
                     labels.append(("CMA-0B","NCs","(T)/haDZ"))
             if key == "Natty (CCSD_T_aDZ)":
                 # labels.append(("CMA0","NCs","TZ/DZ"))
-                if cma1:
+                if cmaA:
                     labels.append(("CMA-0A","NCs","(T)/aDZ"))
                 else:
                     labels.append(("CMA-0B","NCs","(T)/aDZ"))
             if key == "Natty (CCSD_T_haTZ)":
                 # labels.append(("CMA0","NCs","TZ/DZ"))
-                if cma1:
+                if cmaA:
                     labels.append(("CMA-0A","NCs","(T)/haTZ"))
                 else:
                     labels.append(("CMA-0B","NCs","(T)/haTZ"))
             if key == "Natty (CCSD_haTZ)":
                 # labels.append(("CMA0","NCs","TZ/DZ"))
-                if cma1:
+                if cmaA:
                     labels.append(("CMA-0A","NCs","(T)/haTZ"))
                 else:
                     labels.append(("CMA-0B","NCs","(T)/haTZ"))
             if key == "Natty (MP2_haTZ)":
                 # labels.append(("CMA0","NCs","TZ/DZ"))
-                if cma1:
+                if cmaA:
                     labels.append(("CMA-0A","NCs","MP2/haTZ"))
                 else:
                     labels.append(("CMA-0B","NCs","MP2/haTZ"))
             if key == "Natty (MP2_aTZ)":
                 # labels.append(("CMA0","NCs","TZ/DZ"))
-                if cma1:
+                if cmaA:
                     labels.append(("CMA-0A","NCs","MP2/aTZ"))
                 else:
                     labels.append(("CMA-0B","NCs","MP2/aTZ"))
             if key == "Natty (MP2_TZ)":
                 # labels.append(("CMA0","NCs","TZ/DZ"))
-                if cma1:
+                if cmaA:
                     labels.append(("CMA-0A","NCs","MP2/TZ"))
                 else:
                     labels.append(("CMA-0B","NCs","MP2/TZ"))
             if key == "Natty (MP2_aDZ)":
                 # labels.append(("CMA0","NCs","TZ/DZ"))
-                if cma1:
+                if cmaA:
                     labels.append(("CMA-0A","NCs","MP2/aDZ"))
                 else:
                     labels.append(("CMA-0B","NCs","MP2/aDZ"))
             if key == "Natty (MP2_haDZ)":
                 # labels.append(("CMA0","NCs","TZ/DZ"))
-                if cma1:
+                if cmaA:
                     labels.append(("CMA-0A","NCs","MP2/haDZ"))
                 else:
                     labels.append(("CMA-0B","NCs","MP2/haDZ"))
             if key == "Natty (MP2_DZ)":
                 # labels.append(("CMA0","NCs","TZ/DZ"))
-                if cma1:
+                if cmaA:
                     labels.append(("CMA-0A","NCs","MP2/DZ"))
                 else:
                     labels.append(("CMA-0B","NCs","MP2/DZ"))
             if key == "Red (CCSD_T_DZ)":
                 # labels.append(("CMA0","DCs","TZ/DZ"))
-                if cma1:
+                if cmaA:
                     labels.append(("CMA-0A","DCs","(T)/DZ"))
                 else:
                     labels.append(("CMA-0B","DCs","(T)/DZ"))
             if key == "Natty (B3LYP_6-31G_2df,p_)":
                 # labels.append(("CMA0","NCs","TZ/DFT"))
-                if cma1:
+                if cmaA:
                     labels.append(("CMA-0A","NCs","B3LYP"))
                 else:
                     labels.append(("CMA-0B","NCs","B3LYP"))
             if key == "Red (B3LYP_6-31G_2df,p_)":
                 # labels.append(("CMA0","DCs","TZ/DFT"))
-                if cma1:
+                if cmaA:
                     labels.append(("CMA-0A","DCs","B3LYP"))
                 else:
                     labels.append(("CMA-0B","DCs","B3LYP"))
             
-            if i > 7 or j + 1 == len(self.freqs):
+            if i > 5 or j + 1 == len(self.freqs):
                 txt += (
                     "\\begin{table}[h!]\n"
                     # "\\subsubsection*{Frequencies}\n"
                     "\\centering\n")
-                print(self.freqs)
-                print(labels)
-                print(keys)
-                # print(self.freqs[keys])
                 for k in range(len(keys)):
-                    print(keys[k])
-                    print(self.freqs[keys[k]])
                     temp_freqs[keys[k]] = self.freqs[keys[k]]
-                print(temp_freqs)
-                ind = pd.MultiIndex.from_tuples(labels) 
+                # print(labels)
+                ind = pd.MultiIndex.from_tuples(labels)
+                # print(ind)
+                # print(ind[0])
                 fdf = pd.DataFrame(data=temp_freqs)
+                # print(fdf)
+                # print(fdf.columns)
+                # print(fdf.columns[0])
                 # fdf = pd.DataFrame(data=self.freqs)
-                fdf.columns = ind
-                fdf.index += 1
+                fdf.columns = ind[0]
+                # fdf.columns = ind
+                indices = []
+                # indices2 = []
+                # indices = [str(x+1) for x in range(len(self.freqs[keys[0]]))]
+                if len(sym_sort):
+                    k = 0
+                    l = 0
+                    for irrep in sym_sort:
+                        # if len(irrep) > 1:
+                            # for m in range(len(irrep)):
+                                # indices.append(f'$\omega_{{{l+m+1}}}$({k})')
+                            # k += 1
+                        for m in range(len(irrep)):
+                            indices.append(f'$\omega_{{{l+m+1}}}$({k})')
+                        k += 1
+                        l += len(irrep)
+                else:
+                    for k in range(len(self.freqs[keys[0]])):
+                        indices.append(f'$\omega_{{{k+1}}}$')
+                    indices.reverse()
+                # print(len(self.freqs[keys[0]]))
+                # print(self.freqs[keys[0]])
+                print(len(indices))
+                print(indices)
+                print(len(fdf.index))
+                print(fdf.index)
+                fdf.index = indices
                 
-                txt += "\\caption{Harmonic frequencies for reference and CMA0 data targeting the CCSD(T)/aug-cc-pVTZ level of theory.}\n"
-                # if cma1:
+                # fdf = fdf.rename('\omega_{}({})'.format).index
+                # fdf = fdf.T.rename('\omega_{}({})'.format,axis=0).T
+                # fdf.set_index('\omega_{' + fdf.index + '}')
+                # fdf.index.rename('\omega_{}'.format)
+                # fdf.set_index('\omega_{'+fdf.index.astype(str)+'}')
+                
+                txt += "\\caption{Harmonic frequencies for reference and CMA0 data targeting the CCSD(T)/cc-pVTZ level of theory. For all CMA2 frequencies, xi = 0.02.}\n"
+                # txt += "\\caption{Harmonic frequencies for reference and CMA0 data targeting the CCSD(T)/aug-cc-pVTZ level of theory.}\n"
+                # if cmaA:
                     # txt += "\\caption{Harmonic frequencies for reference and CMA1 data.}\n"
                 # else:
                     # txt += "\\caption{Harmonic frequencies for reference and CMA0 data.}\n"
@@ -493,7 +583,7 @@ class Molecule(object):
                     tmp += f" {sign} {out}"
                 else:
                     tmp += f" {sign} {abs(term[0])}{out}"
-                if (j % 10) + 1 == 10:
+                if (j % 10) + 1 == 10 and j + 1 != len(nic[1:]):
                     tmp += ("$ \\\\\n"
                             " & $")
             tmp += "$ \\\\\n"
@@ -552,8 +642,6 @@ class ZCoord(object):
 
     def __init__(self,ind):
         # Identify coordinate type
-        # print("ZCoord Ind:")
-        # print(ind)
         if len(ind) == 2:
             self.ind = ",".join(ind)
             self.coord_out = f"r({self.ind})"

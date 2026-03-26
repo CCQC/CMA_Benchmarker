@@ -1,0 +1,18 @@
+import os
+memory 14 GB 
+
+molecule {
+units bohr
+}
+
+set {
+reference rohf
+basis cc-pVTZ                          
+freeze_core true
+e_convergence 10                       
+d_convergence 10                      
+}
+
+e = energy('mp2')
+
+print_out('Grab this energy {0}'.format(e))

@@ -23,6 +23,9 @@ class Projection(object):
         P_combo = np.array([
         [1, 1],
         ]).T
+        tor = np.array([
+        [1, 1, 1, 1],
+        ]).T
 
         M_combo = np.array([
         [1,-1],
@@ -32,10 +35,15 @@ class Projection(object):
         [1],
         ]).T
 
-        Proj = block_diag(HA_str,HA_str,HOH_bend,HOH_bend,HOH_bend,HOH_bend,HOH_bend,HOH_bend,HOH_bend,HOH_bend)
+        # Proj = block_diag(HA_str,HA_str,HOH_bend,HOH_bend,HOH_bend,HOH_bend,HA_str,P_combo,HOH_bend)
+        Proj = block_diag(HA_str,HA_str,HOH_bend,HOH_bend,HOH_bend,HOH_bend,HOH_bend,HOH_bend,HOH_bend,P_combo)
         Proj = 1/norm(Proj,axis=0)*Proj
         
         self.Proj = Proj
+        self.sym_sort = np.array([
+            [0,1,2,4,5,6,7,8],
+            [3,9,10,11],
+            ],dtype=object)
 
 def normalize(mat):
     return 1/norm(mat,axis=0)*mat
@@ -45,4 +53,3 @@ if __name__=="__main__":
     p = Projection([])
     p.run()
     print(p.Proj)
-

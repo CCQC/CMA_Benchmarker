@@ -9,6 +9,10 @@ dirs = os.listdir(here)
 for i in dirs:
     if os.path.isdir(os.getcwd() + "/" + i):
         os.chdir(i)
+        os.chdir("CCSD_T_TZ")
+        print(os.listdir(os.getcwd()))
+        sh.copy(os.getcwd()+'/zmat',os.getcwd()+'/zmat_red')
+        os.chdir('..')
         os.chdir("CCSD_T_DZ")
         print(os.listdir(os.getcwd()))
         sh.copy(os.getcwd()+'/zmat',os.getcwd()+'/zmat_red')

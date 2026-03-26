@@ -55,6 +55,10 @@ class Projection(object):
         Proj = block_diag(HA_str,CH_str,NH_ang,CH_ang,oop)
 
         self.Proj = Proj
+        self.sym_sort = np.array([
+            [0,1,2,4,6,9,11,14,16,17],
+            [3,5,7,8,10,12,13,15],
+            ],dtype=object)
 
 def normalize(mat):
     return 1/norm(mat,axis=0)*mat

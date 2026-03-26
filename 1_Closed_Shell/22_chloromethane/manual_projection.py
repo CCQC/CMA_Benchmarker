@@ -24,12 +24,12 @@ class Projection(object):
         ]).T
 
         angles = np.array([
-            [2.,0,1.,0,0],
-            [-1.,1.,1.,0,0],
-            [-1.,-1.,1.,0,0],
-            [0,0,-1.,2.,0],
-            [0,0,-1.,-1.,1.],
-            [0,0,-1.,-1.,-1.]
+            [ 2.,  0, 1., 0,  0],
+            [-1.,  1.,1., 0,  0],
+            [-1., -1.,1., 0,  0],
+            [ 0,   0,-1., 2., 0],
+            [ 0,   0,-1.,-1., 1.],
+            [ 0,   0,-1.,-1.,-1.]
         ])
         angles = np.transpose(angles)
         temp = angles.copy()
@@ -43,3 +43,8 @@ class Projection(object):
 
         self.Proj = Proj
 
+        self.sym_sort = np.array([
+            [0,1,6],
+            [],
+            [2,3,4,5,7,8],
+            ],dtype=object)
