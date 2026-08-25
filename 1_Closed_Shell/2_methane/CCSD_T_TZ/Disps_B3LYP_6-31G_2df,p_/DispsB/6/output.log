@@ -1,8 +1,0 @@
-2026-08-17:17:58:31,716 INFO     [psi4.driver.task_planner:259] PLANNING Atomic:  keywords={'DFT_RADIAL_POINTS': 99, 'DFT_SPHERICAL_POINTS': 1202, 'D_CONVERGENCE': 1e-10, 'E_CONVERGENCE': 1e-10, 'FREEZE_CORE': 'TRUE', 'REFERENCE': 'RHF', 'SCF_TYPE': 'PK', 'function_kwargs': {}}
-2026-08-17:17:58:31,718 INFO     [psi4.driver.driver:644] Compute gradient(): method=b3lyp, basis=anonymous0a8cc157, molecule=default, nre=13.447707644186714
-2026-08-17:17:58:44,987 INFO     [psi4.driver.driver:647] Return gradient(): -40.52400558453722
-2026-08-17:17:58:44,987 INFO     [psi4.driver.driver:648] [[ 0.         -0.          0.0110658 ]
- [-0.          0.00386179 -0.00360856]
- [ 0.         -0.00386179 -0.00360856]
- [ 0.0014092   0.         -0.00192434]
- [-0.0014092  -0.         -0.00192434]]
