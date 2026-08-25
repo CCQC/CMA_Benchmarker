@@ -1,0 +1,17 @@
+import os
+memory 120 GB 
+
+molecule {
+units bohr
+}
+
+set {
+reference rhf                          
+freeze_core true
+basis cc-pvtz
+pno_convergence very_tight
+}
+
+e = energy('dlpno-ccsd(t)')
+
+print_out('Grab this energy {0}'.format(e))

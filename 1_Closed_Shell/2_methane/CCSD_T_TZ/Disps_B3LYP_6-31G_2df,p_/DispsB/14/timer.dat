@@ -1,0 +1,73 @@
+
+Host: d2-22
+
+Timers On : Mon Aug 17 17:58:33 2026
+Timers Off: Mon Aug 17 17:58:56 2026
+
+Wall Time:       22.60 seconds
+
+                                                       Time (seconds)
+Module                                       User      System        Wall        Calls
+V: Grid                             :      0.833u      0.083s      0.557w      1 calls
+build grid                          :      0.583u      0.033s      0.377w      1 calls
+post-process grid                   :      0.250u      0.050s      0.180w      1 calls
+Total PK formation time             :      0.250u      0.017s      0.164w      1 calls
+Libint2ERI::Libint2ERI              :      0.017u      0.000s      0.014w      3 calls
+HF: Form core H                     :      0.000u      0.000s      0.089w      1 calls
+HF: Form S/X                        :      0.000u      0.000s      0.001w      1 calls
+HF: Guess                           :      0.067u      0.017s      0.044w      1 calls
+SAD Guess                           :      0.050u      0.017s      0.042w      1 calls
+HF: Form G                          :     25.050u      0.250s     15.260w     11 calls
+RV: Form V                          :     24.967u      0.250s     15.218w     11 calls
+Properties                          :      9.433u      0.050s      5.889w  48060 calls
+Functional                          :      8.133u      0.117s      5.031w  48060 calls
+V_xc                                :     10.150u      0.083s      5.988w  44055 calls
+JK: D                               :      0.000u      0.000s      0.000w     11 calls
+JK: USO2AO                          :      0.000u      0.000s      0.000w     11 calls
+JK: JK                              :      0.083u      0.000s      0.040w     11 calls
+PK computes JK                      :      0.083u      0.000s      0.040w     11 calls
+JK: AO2USO                          :      0.000u      0.000s      0.000w     11 calls
+HF: Form F                          :      0.000u      0.000s      0.000w     11 calls
+HF: Form D                          :      0.000u      0.000s      0.000w     11 calls
+HF: DIIS                            :      0.500u      0.083s      0.466w     10 calls
+HF: Form C                          :      0.000u      0.000s      0.010w     10 calls
+Grad: V T Perturb                   :      0.000u      0.000s      0.002w      1 calls
+Grad: S                             :      0.000u      0.000s      0.000w      1 calls
+Grad: JK                            :      0.850u      0.000s      0.516w      1 calls
+Grad: XC                            :      4.983u      0.017s      3.016w      1 calls
+V_xc gradient                       :      1.883u      0.017s      1.193w   4005 calls
+
+--------------------------------------------------------------------------------------
+V: Grid                             :      0.833u      0.083s      0.557w      1 calls
+| build grid                        :      0.583u      0.033s      0.377w      1 calls
+| post-process grid                 :      0.250u      0.050s      0.180w      1 calls
+Total PK formation time             :      0.250u      0.017s      0.164w      1 calls
+| Libint2ERI::Libint2ERI            :      0.000u      0.000s      0.010w      2 calls
+HF: Form core H                     :      0.000u      0.000s      0.089w      1 calls
+HF: Form S/X                        :      0.000u      0.000s      0.001w      1 calls
+HF: Guess                           :      0.067u      0.017s      0.044w      1 calls
+| SAD Guess                         :      0.050u      0.017s      0.042w      1 calls
+HF: Form G                          :     25.050u      0.250s     15.260w     11 calls
+| RV: Form V                        :     24.967u      0.250s     15.218w     11 calls
+| | Properties                      :      7.050u      0.050s      4.495w  44055 calls
+| | Functional                      :      7.433u      0.117s      4.614w  44055 calls
+| | V_xc                            :     10.150u      0.083s      5.988w  44055 calls
+| JK: D                             :      0.000u      0.000s      0.000w     11 calls
+| JK: USO2AO                        :      0.000u      0.000s      0.000w     11 calls
+| JK: JK                            :      0.083u      0.000s      0.040w     11 calls
+| | PK computes JK                  :      0.083u      0.000s      0.040w     11 calls
+| JK: AO2USO                        :      0.000u      0.000s      0.000w     11 calls
+HF: Form F                          :      0.000u      0.000s      0.000w     11 calls
+HF: Form D                          :      0.000u      0.000s      0.000w     11 calls
+HF: DIIS                            :      0.500u      0.083s      0.466w     10 calls
+HF: Form C                          :      0.000u      0.000s      0.010w     10 calls
+Grad: V T Perturb                   :      0.000u      0.000s      0.002w      1 calls
+Grad: S                             :      0.000u      0.000s      0.000w      1 calls
+Grad: JK                            :      0.850u      0.000s      0.516w      1 calls
+| Libint2ERI::Libint2ERI            :      0.017u      0.000s      0.004w      1 calls
+Grad: XC                            :      4.983u      0.017s      3.016w      1 calls
+| Properties                        :      2.383u      0.000s      1.394w   4005 calls
+| Functional                        :      0.700u      0.000s      0.417w   4005 calls
+| V_xc gradient                     :      1.883u      0.017s      1.193w   4005 calls
+
+**************************************************************************************

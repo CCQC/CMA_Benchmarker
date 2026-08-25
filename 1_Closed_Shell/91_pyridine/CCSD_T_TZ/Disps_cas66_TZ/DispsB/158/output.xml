@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<molpro xmlns="http://www.molpro.net/schema/molpro-output"
+  xmlns:xsd="http://www.w3.org/1999/XMLSchema"
+  xmlns:cml="http://www.xml-cml.org/schema"
+  xmlns:stm="http://www.xml-cml.org/schema"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+ <job>
+  <jobstep command="MULTI" commandset="MULTI">
+   <cml:molecule>
+    <cml:symmetry pointGroup="C1">
+    </cml:symmetry>
+    <cml:atomArray>
+     <cml:atom id="a1" elementType="C" x3="0.0" y3="0.19300519543393E-02"
+       z3="-1.41647554236468"/>
+     <cml:atom id="a2" elementType="C" x3="0.0" y3="1.19870254328446" z3="-0.702104585638169"/>
+     <cml:atom id="a3" elementType="C" x3="0.0" y3="-1.19710004588522" z3="-0.702098471048415"/>
+     <cml:atom id="a4" elementType="C" x3="0.0" y3="1.14206473667045" z3="0.689148266264192"/>
+     <cml:atom id="a5" elementType="C" x3="0.0" y3="-1.14154928647515" z3="0.697846495328076"/>
+     <cml:atom id="a6" elementType="N" x3="0.0" y3="-0.835424196886012E-02"
+       z3="1.39871099296118"/>
+     <cml:atom id="a7" elementType="H" x3="0.0" y3="0.237692745073814E-02"
+       z3="-2.49941810162325"/>
+     <cml:atom id="a8" elementType="H" x3="0.0" y3="2.15583671316751" z3="-1.20725564846165"/>
+     <cml:atom id="a9" elementType="H" x3="0.0" y3="-2.15376580916243" z3="-1.20813605148848"/>
+     <cml:atom id="a10" elementType="H" x3="0.0" y3="2.05693295951537" z3="1.27178073922005"/>
+     <cml:atom id="a11" elementType="H" x3="0.0" y3="-2.05707454855122" z3="1.27944597801378"/>
+    </cml:atomArray>
+    <cml:bondArray>
+     <cml:bond atomRefs2="a1 a2"/>
+     <cml:bond atomRefs2="a1 a3"/>
+     <cml:bond atomRefs2="a2 a4"/>
+     <cml:bond atomRefs2="a3 a5"/>
+     <cml:bond atomRefs2="a4 a6"/>
+     <cml:bond atomRefs2="a5 a6"/>
+     <cml:bond atomRefs2="a1 a7"/>
+     <cml:bond atomRefs2="a2 a8"/>
+     <cml:bond atomRefs2="a3 a9"/>
+     <cml:bond atomRefs2="a4 a10"/>
+     <cml:bond atomRefs2="a5 a11"/>
+    </cml:bondArray>
+   </cml:molecule>
+   <property name="Energy" method="MCSCF" principal="true" stateSymmetry="1" stateNumber="1"
+     value="-246.850743319037"/>
+   <property name="Dipole moment" method="MCSCF" principal="true" stateSymmetry="1"
+     stateNumber="1"
+     value="-0.420119622199985E-16 -0.232674436300329E-02 -0.850368983332817"/>
+   <time start="16:41:13" end="16:43:40" cpu="128.03" system="17.88" real="147.11"/>
+   <storage units="megabyte" memory="0.0" sf="712.07" df="747.22" eaf="4545.8" ga="0.0"/>
+   <summary overall_method="MULTI/cc-pVTZ"/>
+  </jobstep>
+  <stm:metadataList>
+   <stm:metadata name="dc:date" content="2026-08-10T16:43:40-04:00"/>
+   <stm:metadata name="dc:creator" content="mel64643"/>
+   <stm:metadata name="dc:title" content="Optimization of azulene"/>
+   <stm:metadata name="cmlm:insilico" content="Molpro"/>
+  </stm:metadataList>
+  <platform>
+   <version major="2022" minor="1" SHA="31073afc4d8441e10870424e0d77336a33bc4286"
+     integer_bits="64" parallelism="mpp">
+    2022.1
+    <date year="2026" month="8" day="10" hour="16" minute="41" second="13">
+     2026-08-10T16:41:13
+    </date>
+   </version>
+   <licence id="ccgc"/>
+   <parallel processes="3" nodes="1" all_processes="3" openmp="1"/>
+   <dimensions natom="400" nvalence="500" nvalence_pno="1000" nbasis="12000" nstate="100"
+     nsymm="16" nrec="512" nprim="2" ncol="100"/>
+  </platform>
+  <input>
+   <p>***,Optimization of azulene</p>
+   <p>memory,1000,m</p>
+   <p>gthresh,energy=1.0d-12,orbital=1.0d-10,oneint=1.0d-16,twoint=1.0d-16,optgrad=1.0d-6,compress=1.0d-13</p>
+   <p>geomtyp=xyz</p>
+   <p>symmetry,nosym</p>
+   <p>bohr</p>
+   <p>geometry = {</p>
+   <p> C    0.0000000000    0.0036472696   -2.6767508373</p>
+   <p> C    0.0000000000    2.2652195117   -1.3267853777</p>
+   <p> C    0.0000000000   -2.2621912305   -1.3267738228</p>
+   <p> C    0.0000000000    2.1581895689    1.3023014825</p>
+   <p> C   -0.0000000000   -2.1572155092    1.3187387532</p>
+   <p> N   -0.0000000000   -0.0157872293    2.6431807042</p>
+   <p> H    0.0000000000    0.0044917419   -4.7232156830</p>
+   <p> H    0.0000000000    4.0739409573   -2.2813825380</p>
+   <p> H    0.0000000000   -4.0700275159   -2.2830462586</p>
+   <p> H    0.0000000000    3.8870399502    2.4033172877</p>
+   <p> H   -0.0000000000   -3.8873075147    2.4178024897</p>
+   <p>}</p>
+   <p>basis=VTZ</p>
+   <p>{multi;occ,24;closed,18}</p>
+  </input>
+  <diagnostics warnings="0"/>
+ </job>
+</molpro>

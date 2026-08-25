@@ -1,0 +1,318 @@
+
+ Working directory              : /lscratch/mel64643/tmp/47351141/
+ Global scratch directory       : /lscratch/mel64643/tmp/47351141/
+ Wavefunction directory         : /home/mel64643/wfu/
+ Main file repository           : /lscratch/mel64643/tmp/47351141/
+
+ id        : ccgc
+
+ Nodes     nprocs
+ b1-9         3
+ Distribution of processes:   nprocs(total)=    4   nprocs(compute)=    3   nprocs(helper)=    1
+ GA implementation: MPI file
+ GA implementation (serial work in mppx): MPI file
+
+ Using customized tuning parameters: mindgm=1; mindgv=20; mindgc=4; mindgr=1; noblas=0; minvec=7
+ default implementation of scratch files=sf  
+
+
+ Variables initialized (1015), CPU time= 0.00 sec
+ ***,Optimization of azulene
+ memory,1000,m
+ gthresh,energy=1.0d-12,orbital=1.0d-10,oneint=1.0d-16,twoint=1.0d-16,optgrad=1.0d-6,compress=1.0d-13
+ geomtyp=xyz
+ symmetry,nosym
+ 
+ 
+ bohr
+ geometry = {
+  C    0.0000000000   -0.0046944644   -2.6767289484
+  C    0.0000000000    2.2686471284   -1.3316746743
+  C    0.0000000000   -2.2587565220   -1.3218898628
+  C   -0.0000000000    2.1608599966    1.3171096687
+  C   -0.0000000000   -2.1545182645    1.3039244826
+  N   -0.0000000000   -0.0076868331    2.6431522570
+  H    0.0000000000   -0.0117907002   -4.7231816650
+  H    0.0000000000    4.0755050781   -2.2897943724
+  H    0.0000000000   -4.0684526741   -2.2746379110
+  H   -0.0000000000    3.8875989297    2.4214339422
+  H   -0.0000000000   -3.8867116745    2.3996732835
+ }
+ 
+ basis=VTZ
+ {multi;occ,24;closed,18}
+ Commands initialized (818), CPU time= 0.01 sec, 672 directives.
+ Default parameters read. Elapsed time= 0.08 sec
+
+ Checking input...
+ Passed
+1
+
+
+                                         ***  PROGRAM SYSTEM MOLPRO  ***
+                                       Copyright, TTI GmbH Stuttgart, 2015
+                                    Version 2022.1 linked Mar  4 2022 00:40:14
+
+
+ **********************************************************************************************************************************
+ LABEL *   Optimization of azulene                                                       
+  64 bit mpp version                                                                     DATE: 10-Aug-26          TIME: 16:42:13  
+ **********************************************************************************************************************************
+
+ SHA1:             31073afc4d8441e10870424e0d77336a33bc4286
+ **********************************************************************************************************************************
+
+ Memory per process:      1000 MW
+ Total memory per node:   3000 MW
+
+ GA preallocation disabled
+ GA check disabled
+
+ Variable memory set to 1000.0 MW
+
+
+ THRESHOLDS:
+
+ ZERO    =  1.00D-12  ONEINT  =  1.00D-16  TWOINT  =  1.00D-16  PREFAC  =  1.00D-14  XXXXXX  =  1.00D-09  EORDER  =  1.00D-04
+ ENERGY  =  1.00D-12  ETEST   =  0.00D+00  EDENS   =  0.00D+00  THRDEDEF=  1.00D-06  GRADIENT=  1.00D-05  STEP    =  1.00D-03
+ ORBITAL =  1.00D-10  CIVEC   =  1.00D-05  COEFF   =  1.00D-04  PRINTCI =  5.00D-02  PUNCHCI =  9.90D+01  OPTGRAD =  1.00D-06
+ OPTENERG=  1.00D-06  OPTSTEP =  3.00D-04  THRGRAD =  1.00D-10  COMPRESS=  1.00D-13  VARMIN  =  1.00D-07  VARMAX  =  1.00D-03
+ THRDOUB =  0.00D+00  THRDIV  =  1.00D-05  THRRED  =  1.00D-07  THRPSP  =  1.00D+00  THRDC   =  1.00D-10  THRCS   =  1.00D-10
+ THRNRM  =  1.00D-08  THREQ   =  0.00D+00  THRDE   =  1.00D+00  THRREF  =  1.00D-05  SPARFAC =  1.00D+00  THRDLP  =  1.00D-07
+ THRDIA  =  1.00D-10  THRDLS  =  1.00D-07  THRGPS  =  0.00D+00  THRKEX  =  0.00D+00  THRDIS  =  2.00D-01  THRVAR  =  1.00D-10
+ THRLOC  =  1.00D-06  THRGAP  =  1.00D-06  THRLOCT = -1.00D+00  THRGAPT = -1.00D+00  THRORB  =  1.00D-06  THRMLTP =  0.00D+00
+ THRCPQCI=  1.00D-10  KEXTA   =  0.00D+00  THRCOARS=  0.00D+00  SYMTOL  =  1.00D-06  GRADTOL =  1.00D-06  THROVL  =  1.00D-08
+ THRORTH =  1.00D-08  THRDLOVL= -1.00D+00  GRID    =  1.00D-06  GRIDMAX =  1.00D-03  DTMAX   =  0.00D+00  THROCCDE=  1.00D-01
+ THROCCDE=  1.00D-01  THRPRINT=  2.50D-01
+
+ SETTING GEOMTYP        =    XYZ
+ ZSYMEL=NOSYM
+ ZUNIT=BOHR
+
+ SETTING BASIS          =    VTZ
+
+
+ Recomputing integrals since basis changed
+
+
+ Using spherical harmonics
+
+ Library entry C      S cc-pVTZ              selected for orbital group  1
+ Library entry C      P cc-pVTZ              selected for orbital group  1
+ Library entry C      D cc-pVTZ              selected for orbital group  1
+ Library entry C      F cc-pVTZ              selected for orbital group  1
+ Library entry N      S cc-pVTZ              selected for orbital group  2
+ Library entry N      P cc-pVTZ              selected for orbital group  2
+ Library entry N      D cc-pVTZ              selected for orbital group  2
+ Library entry N      F cc-pVTZ              selected for orbital group  2
+ Library entry H      S cc-pVTZ              selected for orbital group  3
+ Library entry H      P cc-pVTZ              selected for orbital group  3
+ Library entry H      D cc-pVTZ              selected for orbital group  3
+
+
+ PROGRAM * SEWARD (Integral evaluation for generally contracted gaussian basis sets)     Author: Roland Lindh, 1990
+
+ Geometry written to block  1 of record 700
+
+
+ Point group  C1  
+
+
+
+ ATOMIC COORDINATES
+
+ NR  ATOM    CHARGE       X              Y              Z
+
+   1  C       6.00    0.000000000   -0.004694464   -2.676728948
+   2  C       6.00    0.000000000    2.268647128   -1.331674674
+   3  C       6.00    0.000000000   -2.258756522   -1.321889863
+   4  C       6.00    0.000000000    2.160859997    1.317109669
+   5  C       6.00    0.000000000   -2.154518265    1.303924483
+   6  N       7.00    0.000000000   -0.007686833    2.643152257
+   7  H       1.00    0.000000000   -0.011790700   -4.723181665
+   8  H       1.00    0.000000000    4.075505078   -2.289794372
+   9  H       1.00    0.000000000   -4.068452674   -2.274637911
+  10  H       1.00    0.000000000    3.887598930    2.421433942
+  11  H       1.00    0.000000000   -3.886711674    2.399673283
+
+ Bond lengths in Bohr (Angstrom)
+
+ 1-2  2.641449034  1-3  2.629902034  1-7  2.046465020  2-4  2.650976530  2-8  2.045172121
+     ( 1.397794632)     ( 1.391684223)     ( 1.082942651)     ( 1.402836366)     ( 1.082258479)
+
+  3- 5  2.627882530   3- 9  2.045172121   4- 6  2.541846632   4-10  2.049673009   5- 6  2.530299632
+       ( 1.390615548)       ( 1.082258479)       ( 1.345087311)       ( 1.084640246)       ( 1.338976902)
+
+  5-11  2.049673009
+       ( 1.084640246)
+
+ Bond angles
+
+  1-2-4  118.28101852   1-2-8  121.45313200   1-3-5  118.73532152   1-3-9  121.22598050
+
+  2- 1- 3  118.38009983   2- 1- 7  120.80995008   2- 4- 6  123.77558297   2- 4-10  120.27042009
+
+  3- 1- 7  120.80995008   3- 5- 6  124.22987968   3- 5-11  120.04327173   4- 2- 8  120.26584948
+
+  4- 6- 5  116.59809747   5- 3- 9  120.03869798   6- 4-10  115.95399694   6- 5-11  115.72684859
+
+ NUCLEAR CHARGE:                   42
+ NUMBER OF PRIMITIVE AOS:         367
+ NUMBER OF SYMMETRY AOS:          332
+ NUMBER OF CONTRACTIONS:          250   (  250A   )
+ NUMBER OF INNER CORE ORBITALS:     0   (    0A   )
+ NUMBER OF OUTER CORE ORBITALS:     6   (    6A   )
+ NUMBER OF VALENCE ORBITALS:       29   (   29A   )
+
+
+ NUCLEAR REPULSION ENERGY  205.78160097
+
+ EXTRA SYMMETRY OF AOS IN SYMMETRY 1:   1 1 1 1 2 1 1 2 1 1   2 1 1 1 2 2 1 1 1 2   2 1 1 2 1 1 2 2 1 1   1 1 1 1 2 1 1 2 1 1
+                                        2 1 1 1 2 2 1 1 1 2   2 1 1 2 1 1 2 2 1 1   1 1 1 1 2 1 1 2 1 1   2 1 1 1 2 2 1 1 1 2
+                                        2 1 1 2 1 1 2 2 1 1   1 1 1 1 2 1 1 2 1 1   2 1 1 1 2 2 1 1 1 2   2 1 1 2 1 1 2 2 1 1
+                                        1 1 1 1 2 1 1 2 1 1   2 1 1 1 2 2 1 1 1 2   2 1 1 2 1 1 2 2 1 1   1 1 1 1 2 1 1 2 1 1
+                                        2 1 1 1 2 2 1 1 1 2   2 1 1 2 1 1 2 2 1 1   1 1 1 2 1 1 2 1 1 1   2 2 1 1 1 1 1 2 1 1
+                                        2 1 1 1 2 2 1 1 1 1   1 2 1 1 2 1 1 1 2 2   1 1 1 1 1 2 1 1 2 1   1 1 2 2 1 1 1 1 1 2
+                                        1 1 2 1 1 1 2 2 1 1
+
+ Eigenvalues of metric
+
+         1 0.129E-03 0.395E-03 0.558E-03 0.743E-03 0.757E-03 0.977E-03 0.111E-02 0.126E-02
+
+
+ Contracted 2-electron integrals neglected if value below      1.0D-16
+ AO integral compression algorithm  1   Integral accuracy      1.0D-16
+
+     1910.243 MB (compressed) written to integral file ( 44.9%)
+
+     Node minimum: 625.213 MB, node maximum: 652.739 MB
+
+
+ NUMBER OF SORTED TWO-ELECTRON INTEGRALS:  164070333.     BUFFER LENGTH:  32768
+ NUMBER OF SEGMENTS:  11  SEGMENT LENGTH:   15997437      RECORD LENGTH: 524288
+
+ Memory used in sort:      16.55 MW
+
+ SORT1 READ   531683466. AND WROTE    80226822. INTEGRALS IN    235 RECORDS. CPU TIME:     4.26 SEC, REAL TIME:     4.73 SEC
+ SORT2 READ   242369671. AND WROTE   492211000. INTEGRALS IN   7470 RECORDS. CPU TIME:     1.30 SEC, REAL TIME:     1.71 SEC
+
+ Node minimum:   164059875.  Node maximum:   164080792. integrals
+
+ OPERATOR DM      FOR CENTER  0  COORDINATES:    0.000000    0.000000    0.000000
+
+
+ **********************************************************************************************************************************
+ DATASETS  * FILE   NREC   LENGTH (MB)   RECORD NAMES
+              1      18       30.95       500      610      700      900      950      970     1000      129      960     1100   
+                                          VAR    BASINP    GEOM    SYMINP    ZMAT    AOBASIS   BASIS     P2S    ABASIS      S 
+                                         1400     1410     1200     1210     1080     1600     1650     1700   
+                                           T        V       H0       H01     AOSYM     SMH    MOLCAS    OPER   
+
+ PROGRAMS   *        TOTAL       INT
+ CPU TIMES  *        11.29     11.17
+ REAL TIME  *        12.83 SEC
+ DISK USED  *        31.44 MB (local),        4.53 GB (total)
+ GA USED    *         0.00 MB       (max)       0.00 MB       (current)
+ **********************************************************************************************************************************
+
+ PROGRAM * MULTI (Direct Multiconfiguration SCF)       Authors: P.J. Knowles, H.-J. Werner (1984)
+                                                                D.A. Kreplin, P.J. Knowles, H.-J. Werner (2019)
+
+ Number of closed-shell orbitals:  18 (   18)
+ Number of active  orbitals:        6 (    6)
+ Number of external orbitals:     226 (  226)
+
+ State symmetry 1
+
+ Number of active electrons:   6    Spin symmetry=Singlet   Space symmetry=1
+ Number of states:             1
+ Number of CSFs:             175   (400 determinants, 400 intermediate states)
+
+ Orbital guess generated from atomic densities. Full valence occupancy:   35
+
+ EXTRA SYMMETRY OF MOS IN SYMMETRY 1:   1 1 1 1 1 1 1 1 1 1   1 1 1 1 2 1 1 1 2 2   1 2 2 1 1 2 1 1 1 1   1 1 1 1 1 2 2 1 1 2
+                                        1 1 1 2 1 1 2 1 2 1   1 1 1 1 1 1 1 2 2 1   2 2 1 1 1 2 1 1 2 1   1 1 2 2 1 2 1 1 2 2
+                                        1 1 1 1 2 1 1 1 1 1   2 1 1 2 2 1 1 1 1 1   2 1 2 1 1 1 1 1 2 1   2 2 1 1 2 1 1 2 1 2
+                                        1 1 2 1 1 1 2 1 2 2   1 2 1 2 1 1 2 2 1 2   2 1 1 1 1 2 1 1 1 2   1 2 2 2 1 1 2 1 1 2
+                                        2 1 1 2 1 1 2 1 1 1   2 1 1 1 2 2 1 2 1 1   2 2 2 1 1 1 2 2 1 1   1 1 2 1 2 1 1 2 2 1
+                                        1 1 1 1 2 1 2 2 1 1   1 2 1 2 1 1 1 2 2 2   1 1 1 1 2 1 1 1 2 2   1 1 2 1 1 1 1 1 1 1
+                                        1 1 1 1 1 1 1 1 1 1
+
+ Wavefunction dump at record             2140.2
+
+ Convergence thresholds  0.10E-04 (gradient)  0.10E-11 (energy)
+ 
+ Number of orbital rotations:  5532  ( 108 closed/active, 4068 closed/virtual, 0 active/active, 1356 active/virtual )
+ Total number of variables:    5932
+ 
+ Second-order MCSCF: L-BFGS accelerated
+ 
+ ITER  MIC  NCI  NEG     ENERGY(VAR)    ENERGY(PROJ) ENERGY CHANGE       GRAD(0)  GRAD(ORB)   GRAD(CI)      STEP      TIME
+   1   25    8    2   -246.76675390    -246.82835911   -0.06160521    0.35479984 0.00331902 0.00000000  0.10E+01     11.46
+   2   34   13    0   -246.83683552    -246.84186881   -0.00503329    0.03346607 0.00013529 0.00000000  0.37E+00     23.60
+   3   34   10    0   -246.84212542    -246.84232153   -0.00019611    0.00897312 0.00018141 0.00000000  0.12E+00     35.58
+   4   53   14    0   -246.84233646    -246.84238302   -0.00004656    0.00181631 0.00004580 0.00000000  0.12E+00     48.34
+   5   51   14    0   -246.84239054    -246.84245080   -0.00006025    0.00255253 0.00004429 0.00000000  0.15E+00     61.21
+   6   46   13    0   -246.84246803    -246.84262607   -0.00015804    0.00412067 0.00007340 0.00000000  0.20E+00     73.88
+   7   47   14    0   -246.84269529    -246.84338710   -0.00069181    0.00752279 0.00008125 0.00000000  0.31E+00     86.78
+   8   43   13    0   -246.84395092    -246.84701186   -0.00306094    0.01815619 0.00016451 0.00000000  0.42E+00     99.27
+   9   29   10    0   -246.84867631    -246.85080949   -0.00213318    0.02696088 0.00031100 0.00000000  0.25E+00    111.14
+  10   32   11    0   -246.85109472    -246.85123816   -0.00014344    0.00794907 0.00005930 0.00000000  0.66E-01    123.11
+  11   26   10    0   -246.85124074    -246.85124125   -0.00000051    0.00046558 0.00000077 0.00000000  0.41E-02    134.88
+  12   40   20    0   -246.85124125    -246.85124125   -0.00000000    0.00000029 0.00000000 0.00000000  0.18E-05    147.95
+
+ CONVERGENCE REACHED!  Final gradient:    0.00000000 ( 0.17E-11)
+                       Final energy:   -246.85124125
+ 
+ First order charge density matrix for state 1.1 saved on record 2140.2 (density set 1)
+ 
+ Results for state 1.1
+ =====================
+ !MCSCF STATE 1.1 Energy                      -246.851241253277
+ Nuclear energy                                205.78160097
+ Kinetic energy                                246.53673424
+ One electron energy                          -740.55134905
+ Two electron energy                           287.91850683
+ Virial ratio                                    2.00127570
+ 
+ !MCSCF STATE 1.1 Dipole moment                 -0.00000000     0.01232157    -0.85098417
+ Dipole moment /Debye                           -0.00000000     0.03131830    -2.16298601
+ 
+ No non-zero expectation values
+ 
+ EXTRA SYMMETRY OF MOS IN SYMMETRY 1:   1 1 1 1 1 1 1 1 1 1   1 1 1 1 1 1 2 1 1 2   2 2 2 1 1 1 1 1 1 2   1 1 1 1 1 2 1 2 2 1
+                                        1 1 2 1 1 1 2 1 1 2   1 1 1 1 1 2 1 1 1 2   2 1 2 1 1 2 1 2 1 1   1 1 2 1 2 2 1 1 2 2
+                                        1 1 1 1 1 2 1 1 1 1   2 1 1 2 2 1 1 1 1 1   2 1 2 1 1 1 1 1 2 1   2 2 1 1 2 1 1 2 1 2
+                                        1 1 2 1 1 1 2 1 2 2   2 1 2 1 1 1 2 1 2 2   2 1 1 1 1 2 1 1 1 2   1 2 2 2 1 1 2 1 1 2
+                                        2 1 1 2 1 1 2 1 1 1   2 1 1 2 1 2 2 1 2 1   1 2 2 1 1 2 2 1 1 1   1 2 1 1 2 1 1 1 2 2
+                                        1 1 1 1 1 2 2 2 1 1   1 2 1 2 1 1 1 2 2 2   1 1 1 1 2 1 1 1 2 2   1 2 1 1 1 1 1 1 1 1
+                                        1 1 1 1 1 1 1 1 1 1
+ 
+ 
+ Natural orbital dump at molpro section 2140.2 (Orbital set 2)
+
+
+ **********************************************************************************************************************************
+ DATASETS  * FILE   NREC   LENGTH (MB)   RECORD NAMES
+              1      19      246.77       500      610      700      900      950      970     1000      129      960     1100   
+                                          VAR    BASINP    GEOM    SYMINP    ZMAT    AOBASIS   BASIS     P2S    ABASIS      S 
+                                         1400     1410     1200     1210     1080     1600     1650     1700     1380   
+                                           T        V       H0       H01     AOSYM     SMH    MOLCAS    OPER     JKOP   
+
+              2       4        2.23       700     1000      520     2140   
+                                         GEOM     BASIS   MCVARS    MCSCF   
+
+ PROGRAMS   *        TOTAL     MULTI       INT
+ CPU TIMES  *       153.55    142.26     11.17
+ REAL TIME  *       170.87 SEC
+ DISK USED  *       249.07 MB (local),        5.16 GB (total)
+ SF USED    *       712.07 MB
+ GA USED    *         0.00 MB       (max)       0.00 MB       (current)
+ **********************************************************************************************************************************
+
+ MULTI/cc-pVTZ energy=   -246.851241253277
+
+           MULTI
+   -246.85124125
+ **********************************************************************************************************************************
+ Molpro calculation terminated

@@ -1,0 +1,22 @@
+import os
+memory 14 GB 
+
+molecule {
+units bohr
+no_reorient
+no_com
+}
+
+set {
+reference rhf 
+basis cc-pvtz                         
+freeze_core true
+e_convergence 10                       
+d_convergence 10                      
+dft_spherical_points 1202
+dft_radial_points 99
+}
+
+e = gradient('b3lyp')
+
+print_out('Grab this energy {0}'.format(e))
